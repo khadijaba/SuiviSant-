@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New RessourceEducative{% endblock %}
+
+{% block body %}
+    <h1>Create new RessourceEducative</h1>
+
+    {% if app.session.flashbag.has('success') %}
+        <div class="alert alert-success">
+            {{ app.session.flashbag.get('success')[0] }}
+        </div>
+    {% endif %}
+
+    {{ include('ressource_educative/_form.html.twig') }}
+
+    <a href="{{ path('app_ressource_educative_index') }}">Back to list</a>
+{% endblock %}

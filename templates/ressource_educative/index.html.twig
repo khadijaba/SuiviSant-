@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}RessourceEducative index{% endblock %}
+
+{% block body %}
+    <h1>RessourceEducative index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Contenu</th>
+                <th>Auteur</th>
+                <th>DatePublication</th>
+                <th>Image</th>
+                <th>Video</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ressource_educative in ressource_educatives %}
+            <tr>
+                <td>{{ ressource_educative.id }}</td>
+                <td>{{ ressource_educative.titre }}</td>
+                <td>{{ ressource_educative.contenu|slice(0, 50) }}...</td>
+                <td>{{ ressource_educative.auteur }}</td>
+                <td>{{ ressource_educative.datePublication ? ressource_educative.datePublication|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    {% if ressource_educative.image %}
+                        <img src="{{ asset('uploads/images/' ~ ressource_educative.image) }}" alt="Image" width="100">
+                    {% else %}
+                        Pas d'image
+                    {% endif %}
+                </td>
+                <td>
+                    {% if ressource_educative.video %}
+                        <a href="{{ ressource_educative.video }}" target="_blank">Voir la vidéo</a>
+                    {% else %}
+                        Pas de vidéo
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('app_ressource_educative_show', {'id': ressource_educative.id}) }}">show</a>
+                    <a href="{{ path('app_ressource_educative_edit', {'id': ressource_educative.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ressource_educative_new') }}">Create new</a>
+{% endblock %}

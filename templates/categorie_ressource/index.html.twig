@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CategorieRessource index{% endblock %}
+
+{% block body %}
+    <h1>CategorieRessource index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Date Creation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for categorie_ressource in categorie_ressources %}
+            <tr>
+                <td>{{ categorie_ressource.id }}</td>
+                <td>{{ categorie_ressource.nom }}</td>
+                <td>{{ categorie_ressource.description }}</td>
+                <td>
+                    {% if categorie_ressource.image %}
+                        <img src="{{ categorie_ressource.image }}" alt="Image" style="max-width: 100px;">
+                    {% else %}
+                        <span>No Image</span>
+                    {% endif %}
+                </td>
+                <td>{{ categorie_ressource.dateCreation ? categorie_ressource.dateCreation|date('Y-m-d H:i:s') : 'No Date' }}</td>
+                <td>
+                    <a href="{{ path('app_categorie_ressource_show', {'id': categorie_ressource.id}) }}">show</a>
+                    <a href="{{ path('app_categorie_ressource_edit', {'id': categorie_ressource.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_categorie_ressource_new') }}">Créer une nouvelle catégorie</a>
+{% endblock %}
