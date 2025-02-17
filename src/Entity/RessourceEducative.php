@@ -6,6 +6,8 @@ use App\Repository\RessourceEducativeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity(repositoryClass: RessourceEducativeRepository::class)]
 class RessourceEducative
 {
@@ -13,8 +15,8 @@ class RessourceEducative
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"veillez inserer le titre")]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -30,6 +32,8 @@ class RessourceEducative
     private ?string $image = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(message: "Veuillez insérer l'URL de la vidéo.")]
+    #[Assert\Url(message: "L'URL de la vidéo '{{ value }}' n'est pas valide.")]
     private ?string $video = null;
 
     #[ORM\ManyToOne(targetEntity: CategorieRessource::class, inversedBy: "ressources")]
@@ -46,12 +50,12 @@ class RessourceEducative
         return $this->titre;
     }
 
-    public function setTitre(string $titre): static
+    public function setTitre(?string $titre): static
     {
         $this->titre = $titre;
-
         return $this;
     }
+    
 
     public function getContenu(): ?string
     {
@@ -82,12 +86,12 @@ class RessourceEducative
         return $this->datePublication;
     }
 
-    public function setDatePublication(\DateTimeInterface $datePublication): static
-    {
-        $this->datePublication = $datePublication;
+    public function setDatePublication(?\DateTimeInterface $datePublication): self
+{
+    $this->datePublication = $datePublication;
+    return $this;
+}
 
-        return $this;
-    }
 
     public function getImage(): ?string
     {
@@ -109,7 +113,6 @@ class RessourceEducative
     public function setVideo(?string $video): static
     {
         $this->video = $video;
-
         return $this;
     }
 

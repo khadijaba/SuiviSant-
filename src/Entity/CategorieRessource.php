@@ -31,9 +31,15 @@ class CategorieRessource
     #[ORM\OneToMany(mappedBy: "categorie", targetEntity: RessourceEducative::class, cascade: ["persist", "remove"])]
     private Collection $ressources;
 
+    private $ressourceEducative;
+
     public function __construct()
     {
         $this->ressources = new ArrayCollection();
+    }
+    public function getRessourceEducative()
+    {
+        return $this->ressourceEducative;
     }
 
     public function getId(): ?int

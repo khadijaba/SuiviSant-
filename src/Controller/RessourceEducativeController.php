@@ -78,30 +78,25 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
      * Modifie une ressource éducative existante.
      */
     #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, RessourceEducativeRepository $ressourceEducativeRepository, EntityManagerInterface $entityManager, int $id): Response
-    {
-        $ressourceEducative = $ressourceEducativeRepository->find($id);
+public function edit(Request $request, RessourceEducative $ressourceEducative, EntityManagerInterface $entityManager): Response
+{
+    $form = $this->createForm(RessourceEducativeType::class, $ressourceEducative);
+    $form->handleRequest($request);
 
-        if (!$ressourceEducative) {
-            throw $this->createNotFoundException("Ressource non trouvée !");
-        }
-
-        $form = $this->createForm(RessourceEducativeType::class, $ressourceEducative);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Sauvegarde les modifications
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_ressource_educative_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('ressource_educative/edit.html.twig', [
-            'ressource_educative' => $ressourceEducative,
-            'form' => $form,
-        ]);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+        $this->addFlash('success', 'Ressource éducative mise à jour avec succès !');
+        return $this->redirectToRoute('app_ressource_educative_show', [
+            'id' => $ressourceEducative->getId(),
+        ], Response::HTTP_SEE_OTHER);
     }
-
+    return $this->render('ressource_educative/edit.html.twig', [
+        'ressource_educative' => $ressourceEducative,
+        'form' => $form->createView(),
+    ]);
+    
+    
+}
     /**
      * Supprime une ressource éducative.
      */
