@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un rapport{% endblock %}
+
+{% block body %}
+    <h1>Créer un rapport pour la consultation #{{ consultation.id }}</h1>
+
+    {{ form_start(form) }}
+
+        {# Boucle sur tous les champs du formulaire #}
+        {% for field in form %}
+            <div>
+                {{ form_label(field) }}
+                {{ form_widget(field) }}
+                
+                {# Affichage des erreurs spécifiques à chaque champ #}
+                {% if field.vars.errors|length > 0 %}
+                    <ul>
+                        {% for error in field.vars.errors %}
+                            <li>{{ error.message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button class="btn btn-primary">Créer le rapport</button>
+
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_consultation_show', {'id': consultation.id}) }}">Retour à la consultation</a>
+{% endblock %}
+

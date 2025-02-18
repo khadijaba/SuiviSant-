@@ -1,0 +1,55 @@
+{# templates/consultation/add_rapport.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un rapport{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-3">Ajouter un rapport</h1>
+
+        <div class="card">
+            <div class="card-body">
+                {# Affichage des erreurs globales #}
+                {% for error in form.vars.errors %}
+                    <div class="alert alert-danger">{{ error.message }}</div>
+                {% endfor %}
+
+                <form method="post" onsubmit="return confirm('Confirmez-vous l\'ajout de ce rapport ?');">
+                    {{ form_start(form) }}
+
+                    <div class="mb-3">
+                        {{ form_label(form.date, 'Date du rapport', { 'label_attr': {'class': 'form-label'} }) }}
+                        {{ form_widget(form.date, { 'attr': {'class': 'form-control'} }) }}
+                        {% for error in form.date.vars.errors %}
+                            <div class="text-danger mt-1">{{ error.message }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.description, 'Description', { 'label_attr': {'class': 'form-label'} }) }}
+                        {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
+                        {% for error in form.description.vars.errors %}
+                            <div class="text-danger mt-1">{{ error.message }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.consultation, 'Consultation', { 'label_attr': {'class': 'form-label'} }) }}
+                        {{ form_widget(form.consultation, { 'attr': {'class': 'form-control'} }) }}
+                        {% for error in form.consultation.vars.errors %}
+                            <div class="text-danger mt-1">{{ error.message }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <button class="btn btn-primary">Ajouter le rapport</button>
+                    {{ form_end(form) }}
+                </form>
+
+                <a href="{{ path('app_consultation_index') }}" class="btn btn-secondary mt-3">
+                    Retour à la liste des consultations
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
