@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question
 {
@@ -34,7 +35,7 @@ class Question
     /**
      * @var Collection<int, Reponse>
      */
-    #[ORM\OneToMany(targetEntity: Reponse::class, mappedBy: 'question')]
+    #[ORM\OneToMany(targetEntity: Reponse::class, mappedBy: 'question', cascade: ['remove'], orphanRemoval: true)]
     private Collection $reponses;
 
     public function __construct()
@@ -55,7 +56,6 @@ class Question
     public function setBody(string $body): static
     {
         $this->body = $body;
-
         return $this;
     }
 
@@ -67,7 +67,6 @@ class Question
     public function setDatecreation(\DateTimeInterface $datecreation): static
     {
         $this->datecreation = $datecreation;
-
         return $this;
     }
 
@@ -79,7 +78,6 @@ class Question
     public function setOwnerid(int $ownerid): static
     {
         $this->ownerid = $ownerid;
-
         return $this;
     }
 
@@ -104,7 +102,6 @@ class Question
     public function removeReponse(Reponse $reponse): static
     {
         if ($this->reponses->removeElement($reponse)) {
-            // set the owning side to null (unless already changed)
             if ($reponse->getQuestion() === $this) {
                 $reponse->setQuestion(null);
             }

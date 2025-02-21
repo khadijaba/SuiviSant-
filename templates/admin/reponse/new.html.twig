@@ -1,0 +1,47 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Nouvelle réponse{% endblock %}
+
+{% block body %}
+    {{ block('sidebar') }} {# Include the sidebar block from the parent template #}
+
+    <style>
+        /* Custom CSS to reduce icon size */
+        .btn i {
+            font-size: 0.8rem; /* Adjust the size as needed */
+        }
+    </style>
+
+    <div class="main-content">
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg">
+                        <div class="card-header bg-primary text-white py-4">
+                            <h1 class="h4 mb-0">Nouvelle réponse</h1>
+                        </div>
+                        <div class="card-body p-4">
+                            {# Display the question being answered #}
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ question.body }}</h5>
+                                    <p class="card-text text-muted small">
+                                        Posée par <strong>Utilisateur {{ question.ownerid }}</strong> le {{ question.datecreation ? question.datecreation|date('d/m/Y H:i:s') : '' }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {# Include the form template #}
+                            {{ include('reponse/_form.html.twig') }}
+                        </div>
+                        <div class="card-footer bg-light py-3">
+                            <a href="{{ path('app_admin_question_index') }}" class="btn btn-outline-secondary btn-sm" aria-label="Retour à la liste">
+                                <i class="fas fa-arrow-left me-2"></i> Retour à la liste
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
