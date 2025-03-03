@@ -1,0 +1,33 @@
+/*body {
+    background-color: skyblue;
+}*/
+
+/* Mode clair par défaut */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+}
+
+/* Mode sombre */
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+}
+
+/* Appliquer les couleurs */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--bg-color) !important;
+}
+
+.nav-link, .navbar-brand, .btn-outline-secondary {
+    color: var(--text-color) !important;
+    border-color: var(--text-color) !important;
+}
+
