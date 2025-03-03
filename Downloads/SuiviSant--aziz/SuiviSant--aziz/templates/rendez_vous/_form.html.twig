@@ -1,0 +1,50 @@
+{% block stylesheets %}
+    <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+{% endblock %}
+
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
+
+<section id="booking">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-12 mx-auto">
+                <div class="booking-form" style="margin-top: 50px;">
+                    <h2 class="text-center mb-lg-3 mb-2">Book an appointment</h2>
+                    <div class="row">
+                        <div class="col-lg-6 col-12">
+                            {{ form_widget(form.Email, {'attr': {'class': 'form-control', 'placeholder': 'Email Address'}}) }}
+                            <div class="error-message">{{ form_errors(form.Email) }}</div> <!-- Error in red -->
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'Phone: 123-456-7890'}}) }}
+                            <div class="error-message">{{ form_errors(form.phoneNumber) }}</div> <!-- Error in red -->
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+                            <div class="error-message">{{ form_errors(form.date) }}</div> <!-- Error in red -->
+                        </div>
+
+                        <div class="col-12">
+                            {{ form_widget(form.Message, {'attr': {'class': 'form-control', 'rows': '5', 'placeholder': 'Additional Message'}}) }}
+                            <div class="error-message">{{ form_errors(form.Message) }}</div> <!-- Error in red -->
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-6 mx-auto">
+                            <button type="submit" class="form-control btn btn-primary">{{ button_label|default('Save') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{ form_end(form) }}

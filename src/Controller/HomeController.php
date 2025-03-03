@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 final class HomeController extends AbstractController
 {
@@ -23,7 +24,6 @@ final class HomeController extends AbstractController
             'controller_name' => 'UtilisateurController',
         ]);
     }
-    
     #[Route('/dashboard', name: 'dashboard')]
     public function dashboard(): Response
     {
@@ -32,5 +32,11 @@ final class HomeController extends AbstractController
         ]);
     }
 
-
+    #[Route('/dispoexpert', name: 'dispoexpert')]
+    public function dispoexpert(): Response
+    {
+        return $this->render('dispo_expert/index.html.twig', [
+            'controller_name' => 'DispoExpertController',
+        ]);
+    }
 }

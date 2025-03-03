@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Dashboard for managing users, appointments, educational resources, and more.">
+    <title>Admin Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f6f9;
+        }
+        .sidebar {
+            background-color: #2c3e50;
+            min-height: 100vh;
+            color: #ecf0f1;
+            padding: 1rem;
+            position: fixed;
+            width: 240px;
+            transition: margin-left 0.3s ease-in-out;
+        }
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.8rem;
+            display: block;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .sidebar a:hover {
+            background-color: #34495e;
+        }
+        .sidebar .sidebar-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+            transition: margin-left 0.3s ease-in-out;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        .card i {
+            font-size: 2.5rem;
+            color: #fff;
+        }
+        .card-blue { background-color: #3498db; color: #fff; }
+        .card-green { background-color: #2ecc71; color: #fff; }
+        .card-yellow { background-color: #f1c40f; color: #fff; }
+        .card-red { background-color: #e74c3c; color: #fff; }
+        .chart-container {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1000;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+        @media (max-width: 992px) {
+            .sidebar {
+                margin-left: -240px;
+            }
+            .sidebar.active {
+                margin-left: 0;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .sidebar-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% block body %}
+        {% block sidebar %}
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">Admin Dashboard</div>
+                <a href="{{ path('dashboard') }}"></i> Dashboard</a>
+                <a href="#"><i class="fas fa-users"></i> Utilisateurs</a>
+                <a href="#"><i class="fas fa-calendar-alt"></i> Rendez-vous</a>
+                <a href="#"><i class="fas fa-book"></i> Ressources Éducatives</a>
+                <a href="#"><i class="fas fa-comments"></i> Consultation</a>
+                <a href="{{ path('app_admin_question_index') }}"><i class="fas fa-comments"></i> Forum</a>
+                <a href="#"><i class="fas fa-chart-line"></i> Analytics</a>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+            </div>
+        {% endblock %}
+
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="main-content">
+            {% block navbar %}
+                <!-- Navigation Bar -->
+                <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+                    <div class="container-fluid">
+                        <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button type="submit" class="btn btn-search pe-1" aria-label="Search">
+                                        <i class="fa fa-search search-icon"></i>
+                                    </button>
+                                </div>
+                                <input type="text" placeholder="Search ..." class="form-control">
+                            </div>
+                        </nav>
+                        <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                            <li class="nav-item topbar-icon dropdown hidden-caret">
+                                <a class="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Messages">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item topbar-icon dropdown hidden-caret">
+                                <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+                                    <i class="fa fa-bell"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            {% endblock %}
+
+            <!-- Dashboard Content -->
+            <div class="header">
+                <h1>Welcome to Admin Dashboard</h1>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card card-blue text-center p-4">
+                        <i class="fas fa-users"></i>
+                        <h3 class="mt-3">Users</h3>
+                        <h4>1,245</h4>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-green text-center p-4">
+                        <i class="fas fa-dollar-sign"></i>
+                        <h3 class="mt-3">Sales</h3>
+                        <h4>$12,345</h4>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-yellow text-center p-4">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3 class="mt-3">Orders</h3>
+                        <h4>245</h4>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-red text-center p-4">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3 class="mt-3">Issues</h3>
+                        <h4>5</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-8">
+                    <div class="chart-container">
+                        <h5>User Statistics</h5>
+                        <canvas id="userChart" width="600" height="300"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-container">
+                        <h5>Daily Sales</h5>
+                        <canvas id="salesChart" width="300" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer mt-auto py-3 bg-light border-top">
+            <div class="container text-center">
+                <span class="text-muted">© 2023 Admin Dashboard. All rights reserved.</span>
+            </div>
+        </footer>
+
+        {% block javascripts %}
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                // Sidebar Toggle
+                const sidebar = document.getElementById('sidebar');
+                const sidebarToggle = document.getElementById('sidebarToggle');
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('active');
+                });
+
+                // Charts
+                const userCtx = document.getElementById('userChart').getContext('2d');
+                const userChart = new Chart(userCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                        datasets: [{
+                            label: 'Users',
+                            data: [50, 75, 150, 200, 300],
+                            borderColor: '#3498db',
+                            fill: false,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: false, // Disable responsiveness
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+
+                const salesCtx = document.getElementById('salesChart').getContext('2d');
+                const salesChart = new Chart(salesCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                        datasets: [{
+                            label: 'Sales',
+                            data: [100, 200, 150, 300, 400],
+                            backgroundColor: '#2ecc71'
+                        }]
+                    },
+                    options: {
+                        responsive: false, // Disable responsiveness
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            </script>
+        {% endblock %}
+    {% endblock %}
+</body>
+</html>

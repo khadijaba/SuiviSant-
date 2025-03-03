@@ -1,0 +1,7 @@
+{{ form_start(form) }}
+    {{ form_row(form.date) }}
+    {{ form_row(form.status) }}
+    {{ form_row(form.time) }} <!-- Time input field -->
+    {{ form_row(form.location) }} <!-- Location input field -->
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

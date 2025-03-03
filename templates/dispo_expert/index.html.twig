@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DispoExpert index{% endblock %}
+
+{% block body %}
+    <h1>DispoExpert index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for dispo_expert in dispo_experts %}
+            <tr>
+                <td>{{ dispo_expert.id }}</td>
+                <td>{{ dispo_expert.date ? dispo_expert.date|date('Y-m-d') : '' }}</td>
+                <td>{{ dispo_expert.status ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_dispo_expert_show', {'id': dispo_expert.id}) }}">show</a>
+                    <a href="{{ path('app_dispo_expert_edit', {'id': dispo_expert.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_dispo_expert_new') }}">Create new</a>
+{% endblock %}

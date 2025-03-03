@@ -1,0 +1,25 @@
+{% block title %}DispoExpert{% endblock %}
+
+{% block body %}
+    <h1>DispoExpert Details</h1>
+
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <td>{{ dispo_expert.id }}</td>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td>{{ dispo_expert.date|date('Y-m-d') }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>{{ dispo_expert.status ? 'Active' : 'Inactive' }}</td>
+        </tr>
+    </table>
+
+    <a href="{{ path('app_dispo_expert_index') }}">Back to list</a>
+    <a href="{{ path('app_dispo_expert_edit', {'id': dispo_expert.id}) }}">Edit</a>
+
+    {{ include('dispo_expert/_delete_form.html.twig') }}
+{% endblock %}

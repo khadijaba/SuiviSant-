@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}RendezVous index{% endblock %}
+
+{% block body %}
+    <h1>RendezVous index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>PhoneNumber</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for rendez_vou in rendez_vouses %}
+            <tr>
+                <td>{{ rendez_vou.id }}</td>
+                <td>{{ rendez_vou.date ? rendez_vou.date|date('Y-m-d') : '' }}</td>
+                <td>{{ rendez_vou.phoneNumber }}</td>
+                <td>{{ rendez_vou.Email }}</td>
+                <td>{{ rendez_vou.Message }}</td>
+                <td>
+                    <a href="{{ path('app_rendez_vous_show', {'id': rendez_vou.id}) }}">show</a>
+                    <a href="{{ path('app_rendez_vous_edit', {'id': rendez_vou.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_rendez_vous_new') }}">Create new</a>
+{% endblock %}

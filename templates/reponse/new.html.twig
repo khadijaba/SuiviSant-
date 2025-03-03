@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle réponse{% endblock %}
+
+{% block body %}
+    {{ block('header') }} {# Inclure le bloc header du template parent #}
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white py-4">
+                        <h1 class="h4 mb-0">Nouvelle réponse</h1>
+                    </div>
+                    <div class="card-body p-4">
+                        {# Afficher la question à laquelle on répond #}
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ question.body }}</h5>
+                                <p class="card-text text-muted small">
+                                    Posée par <strong>Utilisateur {{ question.ownerid }}</strong> le {{ question.datecreation ? question.datecreation|date('d/m/Y H:i:s') : '' }}
+                                </p>
+                            </div>
+                        </div>
+
+                        {# Inclure le template du formulaire #}
+                        {{ include('reponse/_form.html.twig') }}
+                    </div>
+                    <div class="card-footer bg-light py-3">
+                        <a href="{{ path('app_question_index') }}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-arrow-left me-2"></i> Retour à la liste
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ block('footer') }} {# Inclure le bloc footer du template parent #}
+{% endblock %}

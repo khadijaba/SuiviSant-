@@ -1,0 +1,9 @@
+{% block title %}New DispoExpert{% endblock %}
+
+{% block body %}
+    <h1>Create new DispoExpert</h1>
+
+    {{ include('dispo_expert/_form.html.twig') }}
+
+    <a href="{{ path('app_dispo_expert_index') }}">back to list</a>
+{% endblock %}

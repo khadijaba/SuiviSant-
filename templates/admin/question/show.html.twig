@@ -1,0 +1,99 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Détails de la question{% endblock %}
+
+{% block body %}
+    {{ block('sidebar') }} {# Include the sidebar block from the parent template #}
+
+    <style>
+        /* Custom CSS to reduce icon size */
+        .btn i {
+            font-size: 0.8rem; /* Adjust the size as needed */
+        }
+    </style>
+
+    <div class="main-content">
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    {# Question Details Card #}
+                    <div class="card shadow-lg">
+                        <div class="card-header bg-primary text-white py-4">
+                            <h1 class="h4 mb-0">Détails de la question</h1>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">ID</label>
+                                <p class="form-control-static">{{ question.id }}</p>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Question</label>
+                                <p class="form-control-static">{{ question.body }}</p>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Date de création</label>
+                                <p class="form-control-static">{{ question.datecreation ? question.datecreation|date('d/m/Y H:i:s') : '' }}</p>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">ID de l'utilisateur</label>
+                                <p class="form-control-static">{{ question.ownerid }}</p>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-light py-3 d-flex justify-content-between align-items-center">
+                            <a href="{{ path('app_admin_question_index') }}" class="btn btn-outline-secondary btn-sm" aria-label="Retour à la liste">
+                                <i class="fas fa-arrow-left me-2"></i> Retour à la liste
+                            </a>
+                            <div>
+                                <a href="{{ path('app_admin_question_edit', {'id': question.id}) }}" class="btn btn-primary btn-sm me-2" aria-label="Modifier">
+                                    <i class="fas fa-edit me-2"></i> Modifier
+                                </a>
+                                {{ include('admin/question/_delete_form.html.twig') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Responses Card #}
+                    <div class="card shadow-lg mt-4">
+                        <div class="card-header bg-secondary text-white py-3">
+                            <h2 class="h5 mb-0">Réponses</h2>
+                        </div>
+                        <div class="card-body p-4">
+                            {# "Répondre" Button #}
+                            <div class="d-flex justify-content-end mb-4">
+                                <a href="{{ path('app_admin_reponse_new', {'questionId': question.id}) }}" class="btn btn-sm btn-outline-success" aria-label="Répondre">
+                                    <i class="fas fa-reply me-1"></i> Répondre
+                                </a>
+                            </div>
+
+                            {% if question.reponses|length > 0 %}
+                                {% for reponse in question.reponses %}
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ reponse.body }}</h5>
+                                            <p class="card-text text-muted small">
+                                                Réponse de <strong>Utilisateur {{ reponse.ownerid }}</strong> le {{ reponse.datereponse ? reponse.datereponse|date('d/m/Y H:i:s') : '' }}
+                                            </p>
+                                            <div class="d-flex justify-content-end">
+                                                <a href="{{ path('app_admin_reponse_edit', {'id': reponse.id}) }}" class="btn btn-sm btn-outline-primary me-2" aria-label="Modifier">
+                                                    <i class="fas fa-edit me-1"></i> Modifier
+                                                </a>
+                                                {{ include('/admin/reponse/_delete_form.html.twig') }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="alert alert-info" role="alert">
+                                    <i class="fas fa-info-circle me-2"></i>Aucune réponse trouvée.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
