@@ -1,17 +1,258 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>{% block title %} Bien-Être+ {% endblock %}</title>
+
+        <link rel="icon" href="{{ asset('assets/favicon.ico') }}">
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+        <!-- CSS Files -->
+        {{ encore_entry_link_tags('app') }} <!-- Webpack Encore -->
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-icons.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/owl.theme.default.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/templatemo-medic-care.css') }}">
+
         {% block stylesheets %}
         {% endblock %}
-
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+
+    <body id="top">
+        <main>
+            <!-- Navigation Bar -->
+            <nav class="navbar navbar-expand-lg bg-light fixed-top shadow-lg">
+                <div class="container">
+                    <a class="navbar-brand mx-auto d-lg-none" href="{{ path('app_home') }}">
+                        Bien-Être+
+                        <strong class="d-block">Health and Well-being</strong>
+                    </a>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item active"><a class="nav-link" href="#hero">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#timeline">Timeline</a></li>
+                            <a class="navbar-brand d-none d-lg-block" href="{{ path('app_home') }}">
+                                Bien-Être+
+                                <strong class="d-block">Health and Well-being</strong>
+                            </a>
+                            <li class="nav-item"><a class="nav-link" href="#reviews">Testimonials</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#booking">Booking</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Hero Section (Carrousel) -->
+            <section class="hero" id="hero">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img src="{{ asset('assets/images/slider/portrait-successful-mid-adult-doctor-with-crossed-arms.jpg') }}" class="img-fluid" alt="">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="{{ asset('assets/images/slider/young-asian-female-dentist-white-coat-posing-clinic-equipment.jpg') }}" class="img-fluid" alt="">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="{{ asset('assets/images/slider/doctor-s-hand-holding-stethoscope-closeup.jpg') }}" class="img-fluid" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="heroText d-flex flex-column justify-content-center">
+                                <h1 class="mt-auto mb-2">
+                                    Better
+                                    <div class="animated-info">
+                                        <span class="animated-item">health</span>
+                                        <span class="animated-item">days</span>
+                                        <span class="animated-item">lives</span>
+                                    </div>
+                                </h1>
+                                <p class="mb-4">La santé et le bien-être vont au-delà de l’absence de maladie. Ils impliquent un équilibre physique, mental et social, nécessitant des habitudes saines pour une meilleure qualité de vie.</p>
+                                <div class="heroLinks d-flex flex-wrap align-items-center">
+                                    <a class="custom-link me-4" href="#about" data-hover="Learn More">Learn More</a>
+                                    <p class="contact-phone mb-0"><i class="bi-phone"></i> 010-020-0340</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section class="section-padding" id="about">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <h2 class="mb-lg-3 mb-3">Meet Dr. Carson</h2>
+                            <p>Protect yourself and others by wearing masks and washing hands frequently. Outdoor is safer than indoor for gatherings or holding events. People who get sick with Coronavirus disease (COVID-19) will experience mild to moderate symptoms and recover without special treatments.</p>
+                            <p>You can feel free to use this CSS template for your medical profession or health care related websites. You can <a rel="nofollow" href="http://paypal.me/templatemo" target="_blank">support us a little</a> via PayPal if this template is good and useful for your work.</p>
+                        </div>
+
+                        <!-- Years of Experience Section -->
+                        <div class="col-lg-4 col-md-5 col-12 mx-auto">
+                            <div class="featured-circle bg-white shadow-lg d-flex justify-content-center align-items-center">
+                                <p class="featured-text"><span class="featured-number">12</span> Years<br> of Experiences</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Timeline Section -->
+            <section class="section-padding" id="timeline">
+                <div class="container">
+                    <div class="row">
+                        <h2 class="text-center mb-lg-5 mb-4">Our Timeline</h2>
+                        <div class="timeline">
+                            <!-- Timeline Event 1 -->
+                            <div class="row g-0 justify-content-end justify-content-md-around align-items-start timeline-nodes">
+                                <div class="col-9 col-md-5 me-md-4 me-lg-0 order-3 order-md-1 timeline-content bg-white shadow-lg">
+                                    <h3 class="text-light">Get the vaccine</h3>
+                                    <p>Donec facilisis urna dui, a dignissim mauris pretium a. Quisque quis libero fermentum, tempus felis eu, consequat nibh.</p>
+                                </div>
+                                <div class="col-3 col-sm-1 order-2 timeline-icons text-md-center">
+                                    <i class="bi-patch-check-fill timeline-icon"></i>
+                                </div>
+                                <div class="col-9 col-md-5 ps-md-3 ps-lg-0 order-1 order-md-3 py-4 timeline-date">
+                                    <time>2021-07-31 Saturday</time>
+                                </div>
+                            </div>
+
+                            <!-- Add more timeline events here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials Section -->
+            <section class="section-padding pb-0" id="reviews">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="text-center mb-lg-5 mb-4">Our Patients</h2>
+                            <div class="owl-carousel reviews-carousel owl-loaded owl-drag">
+                                <div class="owl-stage-outer">
+                                    <div class="owl-stage" style="transition: 0.3s; width: 3184px; transform: translate3d(-995px, 0px, 0px);">
+                                        <!-- Review Item 1 -->
+                                        <div class="owl-item cloned" style="width: 298px; margin-right: 100px;">
+                                            <figure class="reviews-thumb d-flex flex-wrap align-items-center rounded">
+                                                <div class="reviews-stars">
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                </div>
+                                                <p class="text-primary d-block mt-2 mb-0 w-100"><strong>Great services!</strong></p>
+                                                <p class="reviews-text w-100">Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec sit amet velit vitae purus aliquam efficitur.</p>
+                                                <img src="{{ asset('assets/images/reviews/portrait-british-woman.jpeg') }}" class="img-fluid reviews-image" alt="">
+                                                <figcaption class="ms-4">
+                                                    <strong>Laura Zono</strong>
+                                                    <span class="text-muted">New Patient</span>
+                                                </figcaption>
+                                            </figure>
+                                        </div>
+
+                                        <!-- Review Item 2 -->
+                                        <div class="owl-item cloned" style="width: 298px; margin-right: 100px;">
+                                            <figure class="reviews-thumb d-flex flex-wrap align-items-center rounded">
+                                                <div class="reviews-stars">
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star"></i>
+                                                    <i class="bi-star"></i>
+                                                </div>
+                                                <p class="text-primary d-block mt-2 mb-0 w-100"><strong>Best Advices</strong></p>
+                                                <p class="reviews-text w-100">Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla.</p>
+                                                <img src="{{ asset('assets/images/reviews/woman-wearing-mask-face-closeup-covid-19-green-background.jpeg') }}" class="img-fluid reviews-image" alt="">
+                                                <figcaption class="ms-4">
+                                                    <strong>Rosey</strong>
+                                                    <span class="text-muted">Almost Recovered</span>
+                                                </figcaption>
+                                            </figure>
+                                        </div>
+                                        <!-- Add more reviews here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+<section id="programmes" class="section-padding">
+    <div class="container">
+        <h2 class="text-center mb-lg-5 mb-4">Nos Programmes de Santé</h2>
+        <div class="table-responsive">
+       
+           {% block programme %}{% endblock %}
+            
+             </div>
+    </div>
+</section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="site-footer section-padding" id="contact">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-5 me-auto col-12">
+                        <h5 class="mb-lg-4 mb-3">Opening Hours</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex">Sunday : Closed</li>
+                            <li class="list-group-item d-flex">Monday - Friday <span>8:00 AM - 3:30 PM</span></li>
+                            <li class="list-group-item d-flex">Saturday <span>10:30 AM - 5:30 PM</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-12 my-4 my-lg-0">
+                        <h5 class="mb-lg-4 mb-3">Our Clinic</h5>
+                        <p><a href="mailto:hello@company.co">hello@company.co</a></p>
+                        <p>123 Digital Art Street, San Diego, CA 92123</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-12 ms-auto">
+                        <h5 class="mb-lg-4 mb-2">Socials</h5>
+                        <ul class="social-icon">
+                            <li><a href="#" class="social-icon-link bi-facebook"></a></li>
+                            <li><a href="#" class="social-icon-link bi-twitter"></a></li>
+                            <li><a href="#" class="social-icon-link bi-instagram"></a></li>
+                            <li><a href="#" class="social-icon-link bi-youtube"></a></li>
+                        </ul>
+                        <div>
+                            <p class="copyright-text">Copyright © Bien-Être+ 2021</p>
+                            <p class="copyright-text">Design: <a href="https://templatemo.com" target="_parent">TemplateMo</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- JavaScript Files -->
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+            <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+            <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+            <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
+            <script src="{{ asset('assets/js/scrollspy.min.js') }}"></script>
+            <script src="{{ asset('assets/js/custom.js') }}"></script>
+        {% endblock %}
     </body>
 </html>

@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Form;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class ParticipationType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('name', TextType::class, [
+                'label' => 'Nom complet',
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Nom complet']
+            ])
+            ->add('email', EmailType::class, [
+                'label' => 'Adresse email',
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Adresse email']
+            ])
+            ->add('phone', TelType::class, [
+                'label' => 'Téléphone',
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Téléphone (123-456-7890)']
+            ])
+            ->add('date', DateType::class, [
+                'label' => 'Date de participation',
+                'widget' => 'single_text',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('message', TextareaType::class, [
+                'label' => 'Message additionnel',
+                'required' => false,
+                'attr' => ['class' => 'form-control', 'rows' => '5', 'placeholder' => 'Message additionnel']
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Réserver',
+                'attr' => ['class' => 'btn btn-primary w-100']
+            ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([]);
+    }
+}

@@ -1,0 +1,199 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos Programmes de Santé{% endblock %}
+
+{% block programme %}
+<section class="section-padding" id="programmes">
+    <div class="container">
+       
+        
+        {% if programme_santes is not empty %}
+        <div class="programmes-container">
+            <!-- Scroll Buttons -->
+            <button class="scroll-btn left" onclick="scrollProgrammes(-1)">&#10094;</button>
+            
+            <div class="programmes-wrapper">
+                <div class="programmes">
+                    {% for programme_sante in programme_santes %}
+                    <!-- Programme Card -->
+                    <div class="programme-card">
+                        <img src="{{ asset('assets/images/programmes/default.jpg') }}" class="programme-image" alt="{{ programme_sante.nom }}">
+                        <div class="programme-content">
+                            <h5 class="text-primary"><strong>{{ programme_sante.nom }}</strong></h5>
+                            <p><strong>Description:</strong> {{ programme_sante.description }}</p>
+                            <p><strong>Date:</strong> {{ programme_sante.date ? programme_sante.date|date('Y-m-d') : 'Non définie' }}</p>
+                            <p><strong>Objectif:</strong> {{ programme_sante.objectif }}</p>
+                            <p><strong>Localisation:</strong> {{ programme_sante.localisation }}</p>
+
+                            <!-- Star Rating System -->
+                            <div class="rating" data-programme-id="{{ programme_sante.id }}">
+                                {% set stars = programme_sante.rating|default(0) %}
+                                {% for i in 1..5 %}
+                                    <span class="star {% if i <= stars %}text-warning{% else %}text-muted{% endif %}" data-value="{{ i }}">★</span>
+                                {% endfor %}
+                            </div>
+
+                            <!-- QR Code -->
+                            <div class="qr-code">
+                                <img src="{{ path('app_programme_qr', {'id': programme_sante.id}) }}" 
+                                     alt="QR Code du programme"
+                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/no-qr.png') }}'">
+                            </div>
+
+                            <div class="mt-3">
+                               
+                                <a href="{{ path('programme_user_participer', {'id': programme_sante.id}) }}" class="btn btn-success btn-sm">Participer</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button class="scroll-btn right" onclick="scrollProgrammes(1)">&#10095;</button>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">Aucun programme trouvé.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Styles -->
+<style>
+    /* Horizontal Scroll Container */
+    .programmes-container {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .programmes-wrapper {
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        white-space: nowrap;
+        width: 80%;
+        padding: 10px;
+    }
+
+    .programmes {
+        display: flex;
+        gap: 20px;
+        width: max-content;
+    }
+
+    .programme-card {
+        display: inline-block;
+        background: white;
+        border-radius: 10px;
+        padding: 15px;
+        width: 300px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s;
+    }
+
+    .programme-card:hover {
+        transform: scale(1.05);
+    }
+
+    .programme-image {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    /* QR Code */
+    .qr-code img {
+        width: 100px;
+        height: 100px;
+        margin-top: 10px;
+    }
+
+    .rating {
+        font-size: 1.5rem;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .text-warning {
+        color: gold;
+    }
+
+    .text-muted {
+        color: lightgray;
+    }
+
+    /* Scroll Buttons */
+    .scroll-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 50%;
+        font-size: 24px;
+        z-index: 10;
+        transition: background 0.3s;
+    }
+
+    .scroll-btn:hover {
+        background: rgba(0, 0, 0, 0.9);
+    }
+
+    .scroll-btn.left {
+        left: 10px;
+    }
+
+    .scroll-btn.right {
+        right: 10px;
+    }
+</style>
+
+<!-- JavaScript -->
+<script>
+    // Horizontal Scroll Function
+    function scrollProgrammes(direction) {
+        const wrapper = document.querySelector(".programmes-wrapper");
+        const scrollAmount = 400; // Scroll by 400px
+        wrapper.scrollLeft += direction * scrollAmount;
+    }
+
+    // Star Rating Click Event
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".rating .star").forEach(star => {
+            star.addEventListener("click", function () {
+                let rating = this.getAttribute("data-value");
+                let programmeId = this.parentElement.getAttribute("data-programme-id");
+
+                // Envoi AJAX pour enregistrer la note
+                fetch("/programme/rate/" + programmeId + "/" + rating, {
+                    method: "POST",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        // Mise à jour des étoiles après vote
+                        let stars = this.parentElement.querySelectorAll(".star");
+                        stars.forEach(s => {
+                            s.classList.remove("text-warning");
+                            s.classList.add("text-muted");
+                        });
+                        for (let i = 0; i < rating; i++) {
+                            stars[i].classList.remove("text-muted");
+                            stars[i].classList.add("text-warning");
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+{% endblock %}

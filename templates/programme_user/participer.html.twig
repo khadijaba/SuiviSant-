@@ -1,0 +1,62 @@
+
+{% block title %}Réserver une participation{% endblock %}
+
+{% block body %}
+<section id="booking" class="section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-12 mx-auto">
+                <h2 class="text-center mb-4">Réserver une participation</h2>
+                <div class="booking-form p-4 border rounded shadow-sm bg-light">
+                    {{ form_start(form, { 'attr': {'id': 'booking-form'} }) }}
+                    <div class="row">
+                        <div class="col-lg-6 col-12 mb-3">
+                            {{ form_row(form.name) }}
+                        </div>
+                        <div class="col-lg-6 col-12 mb-3">
+                            {{ form_row(form.email) }}
+                        </div>
+                        <div class="col-lg-6 col-12 mb-3">
+                            {{ form_row(form.phone) }}
+                        </div>
+                        <div class="col-lg-6 col-12 mb-3">
+                            {{ form_row(form.date) }}
+                        </div>
+                        <div class="col-12 mb-3">
+                            {{ form_row(form.message) }}
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mx-auto">
+                            {{ form_row(form.submit) }}
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Styles -->
+<style>
+    .section-padding {
+        padding: 60px 0;
+    }
+
+    .booking-form {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+</style>
+
+{% endblock %}

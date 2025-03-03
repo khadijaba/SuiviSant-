@@ -1,0 +1,8 @@
+{% if suivi_programme.id %}
+    <form method="post" action="{{ path('app_suivi_programme_delete', {'id': suivi_programme.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ suivi_programme.id) }}">
+        <button class="btn btn-danger">Delete</button>
+    </form>
+{% else %}
+    <p class="text-warning">No valid ID found for this program. Unable to delete.</p>
+{% endif %}
