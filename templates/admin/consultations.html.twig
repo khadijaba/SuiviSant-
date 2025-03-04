@@ -3,10 +3,124 @@
 {% block title %}Gestion des Consultations{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h2 class="mb-4">Gestion des Consultations</h2>
-    
-    <a href="{{ path('app_consultation_new') }}" class="btn btn-success mb-3">Ajouter Consultation</a>
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f6f9;
+    }
+    .sidebar {
+        background-color: #2c3e50;
+        min-height: 100vh;
+        color: #ecf0f1;
+        padding: 1rem;
+        position: fixed;
+        width: 240px;
+    }
+    .sidebar a {
+        color: #ecf0f1;
+        text-decoration: none;
+        font-size: 1rem;
+        padding: 0.8rem;
+        display: block;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+    .sidebar a:hover {
+        background-color: #34495e;
+    }
+    .sidebar .sidebar-header {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+    }
+    .main-content {
+        margin-left: 260px;
+        padding: 2rem;
+    }
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
+    }
+    .card:hover {
+        transform: translateY(-10px);
+    }
+    .card i {
+        font-size: 2.5rem;
+        color: #fff;
+    }
+    .card-blue { background-color: #3498db; color: #fff; }
+    .card-green { background-color: #2ecc71; color: #fff; }
+    .card-yellow { background-color: #f1c40f; color: #fff; }
+    .card-red { background-color: #e74c3c; color: #fff; }
+    .chart-container {
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 1rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="sidebar">
+    <div class="sidebar-header">Admin Dashboard</div>
+    <a href="#"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="#"><i class="fas fa-users"></i> Utilisateurs</a>
+    <a href="#"><i class="fas fa-calendar-check"></i> Rendez-vous</a>
+    <a href="#"><i class="fas fa-book"></i> Ressources Éducatives</a>
+    <a href="{{ path('admin_consultation_index') }}"><i class="fas fa-notes-medical"></i> Consultations</a>
+    <a href="#"><i class="fas fa-comments"></i> Forum</a>
+    <a href="#"><i class="fas fa-chart-line"></i> Analytics</a>
+    <a href="#"><i class="fas fa-cog"></i> Settings</a>
+</div>
+
+<div class="main-content">
+    <nav class="navbar navbar-expand-lg border-bottom">
+        <div class="container-fluid">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fa fa-envelope"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fa fa-bell"></i></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <h1>Welcome to Admin Dashboard</h1>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card card-blue text-center p-4">
+                <i class="fas fa-users"></i>
+                <h3>Users</h3>
+                <h4>1,245</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-green text-center p-4">
+                <i class="fas fa-dollar-sign"></i>
+                <h3>Sales</h3>
+                <h4>$12,345</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-yellow text-center p-4">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Orders</h3>
+                <h4>245</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-red text-center p-4">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Issues</h3>
+                <h4>5</h4>
+            </div>
+        </div>
+    </div>
+
+    <h2>Gestion des Consultations</h2>
 
     <table class="table table-bordered">
         <thead>
@@ -17,13 +131,15 @@
                 <th>Rapport</th>
                 <th>Actions</th>
             </tr>
+
         </thead>
+
         <tbody>
             {% for consultation in consultations %}
                 <tr>
                     <td>{{ consultation.id }}</td>
                     <td>{{ consultation.date ? consultation.date|date('Y-m-d H:i') : 'Non spécifiée' }}</td>
-                    <td>{{ consultation.description is not empty ? consultation.description : 'Aucune description' }}</td>
+                    <td>{{ consultation.description ?: 'Aucune description' }}</td>
                     <td>
                         {% if consultation.rapport %}
                             <a href="{{ path('app_consultation_show', { 'id': consultation.id }) }}" class="btn btn-info btn-sm">Voir</a>
@@ -46,5 +162,17 @@
             {% endfor %}
         </tbody>
     </table>
+     <a href="{{ path('app_consultation_new') }}" class="btn btn-success mb-3">Ajouter Consultation</a>
+
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const userChart = new Chart(document.getElementById('userChart').getContext('2d'), {
+        type: 'line',
+        data: { labels: ['Mon', 'Tue', 'Wed'], datasets: [{ label: 'Users', data: [50, 75, 150], borderColor: '#3498db' }] }
+    });
+</script>
+
 {% endblock %}
+

@@ -1,55 +1,97 @@
-{# templates/consultation/add_rapport.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Ajouter un rapport{% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
-        <h1 class="mb-3">Ajouter un rapport</h1>
+<div class="d-flex">
+    <div class="sidebar">
+        <div class="sidebar-header">Admin Dashboard</div>
+        <a href="#"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="#"><i class="fas fa-users"></i> Utilisateurs</a>
+        <a href="#"><i class="fas fa-calendar-check"></i> Rendez-vous</a>
+        <a href="#"><i class="fas fa-book"></i> Ressources Éducatives</a>
+        <a href="{{ path('admin_consultation_index') }}"><i class="fas fa-notes-medical"></i> Consultations</a>
+        <a href="#"><i class="fas fa-comments"></i> Forum</a>
+        <a href="#"><i class="fas fa-chart-line"></i> Analytics</a>
+        <a href="#"><i class="fas fa-cog"></i> Paramètres</a>
+    </div>
+    <div class="main-content">
+        <div class="container mt-4">
+            <h1 class="mb-3">Ajouter un rapport</h1>
+            <div class="card">
+                <div class="card-body">
+                    {% for error in form.vars.errors %}
+                        <div class="alert alert-danger">{{ error.message }}</div>
+                    {% endfor %}
+                    <form method="post" onsubmit="return confirm('Confirmez-vous l\'ajout de ce rapport ?');">
+                        {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_label(form.date, 'Date du rapport', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+                            {% for error in form.date.vars.errors %}
+                                <div class="text-danger mt-1">{{ error.message }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                            {% for error in form.description.vars.errors %}
+                                <div class="text-danger mt-1">{{ error.message }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.consultation, 'Consultation', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.consultation, {'attr': {'class': 'form-control'}}) }}
+                            {% for error in form.consultation.vars.errors %}
+                                <div class="text-danger mt-1">{{ error.message }}</div>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ajouter le rapport</button>
+                        {{ form_end(form) }}
+                    </form>
 
-        <div class="card">
-            <div class="card-body">
-                {# Affichage des erreurs globales #}
-                {% for error in form.vars.errors %}
-                    <div class="alert alert-danger">{{ error.message }}</div>
-                {% endfor %}
-
-                <form method="post" onsubmit="return confirm('Confirmez-vous l\'ajout de ce rapport ?');">
-                    {{ form_start(form) }}
-
-                    <div class="mb-3">
-                        {{ form_label(form.date, 'Date du rapport', { 'label_attr': {'class': 'form-label'} }) }}
-                        {{ form_widget(form.date, { 'attr': {'class': 'form-control'} }) }}
-                        {% for error in form.date.vars.errors %}
-                            <div class="text-danger mt-1">{{ error.message }}</div>
-                        {% endfor %}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form_label(form.description, 'Description', { 'label_attr': {'class': 'form-label'} }) }}
-                        {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
-                        {% for error in form.description.vars.errors %}
-                            <div class="text-danger mt-1">{{ error.message }}</div>
-                        {% endfor %}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form_label(form.consultation, 'Consultation', { 'label_attr': {'class': 'form-label'} }) }}
-                        {{ form_widget(form.consultation, { 'attr': {'class': 'form-control'} }) }}
-                        {% for error in form.consultation.vars.errors %}
-                            <div class="text-danger mt-1">{{ error.message }}</div>
-                        {% endfor %}
-                    </div>
-
-                    <button class="btn btn-primary">Ajouter le rapport</button>
-                    {{ form_end(form) }}
-                </form>
-
-                <a href="{{ path('app_consultation_index') }}" class="btn btn-secondary mt-3">
-                    Retour à la liste des consultations
-                </a>
+                    <a href="{{ path('app_consultation_index') }}" class="btn btn-secondary mt-3">
+                        Retour à la liste des consultations
+                    </a>
+                </div>
             </div>
         </div>
     </div>
+</div>
+
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f6f9;
+    }
+    .sidebar {
+        background-color: #2c3e50;
+        min-height: 100vh;
+        color: #ecf0f1;
+        padding: 1rem;
+        position: fixed;
+        width: 240px;
+    }
+    .sidebar a {
+        color: #ecf0f1;
+        text-decoration: none;
+        font-size: 1rem;
+        padding: 0.8rem;
+        display: block;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+    .sidebar a:hover {
+        background-color: #34495e;
+    }
+    .main-content {
+        margin-left: 260px;
+        padding: 2rem;
+        width: 100%;
+    }
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
 {% endblock %}

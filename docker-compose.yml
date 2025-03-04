@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  caddy:
+    image: dunglas/mercure:v0.13.0
+    ports:
+      - "3000:80"
+      - "3001:443"
+    volumes:
+      - ./scripts/mercure/Caddyfile.docker:/etc/caddy/Caddyfile
+      - ./scripts/mercure/data:/data
+      - ./scripts/mercure/config:/config
+    environment:
+      SERVER_NAME: "127.0.0.1:443"
+      MERCURE_PUBLISHER_JWT_KEY: "votreCleDePublieur"
+      MERCURE_SUBSCRIBER_JWT_KEY: "votreCleDeSubscriber"
+      MERCURE_EXTRA_DIRECTIVES: |
+        cors_origins https://127.0.0.1
+        publish_origins https://127.0.0.1
+        ui
+      GLOBAL_OPTIONS: |
+        local_certs
+        default_sni 127.0.0.1

@@ -1,0 +1,167 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+ <!-- Navigation Bar -->
+            <nav class="navbar navbar-expand-lg bg-light fixed-top shadow-lg">
+                <div class="container">
+                    <a class="navbar-brand mx-auto d-lg-none" href="{{ path('app_home') }}">
+                        Bien-Être+
+                        <strong class="d-block">Health and Well-being</strong>
+                    </a>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav mx-auto">
+<li class="nav-item active"></li>
+                            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#timeline">Timeline</a></li>
+                            <a class="navbar-brand d-none d-lg-block" href="{{ path('app_home') }}">
+                                Bien-Être+
+                                <strong class="d-block">Health and Well-being</strong>
+                            </a>
+                            <li class="nav-item"><a class="nav-link" href="#reviews">Testimonials</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#booking">Booking</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_consultation_index') }}">Consultations</a></li>
+
+
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+    <div class="container mt-5">
+        <h3 class="text-center">Rapport de la Consultation</h3>
+
+        <div class="col-md-12">
+            {% if pagination.items is not empty %}
+                {% for section in pagination.items %}
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><strong>Rapport du {{ consultation.date|date('d/m/Y') }}</strong></h5>
+                            
+                            {# Afficher chaque section du rapport #}
+                            <div class="card-text">
+                                {{ section|raw }} <!-- Afficher le contenu de la page actuelle -->
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center">Aucun rapport trouvé pour cette consultation.</p>
+            {% endif %}
+        </div>
+
+        {# Pagination pour les sections du rapport #}
+        <div class="pagination mt-4">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </div>
+
+<a href="{{ path('app_consultation_download_rapport', { id: consultation.id }) }}" class="btn btn-primary">
+    Télécharger le rapport en PDF
+</a>
+
+
+      <!-- Footer -->
+        {% block footer %}
+        <footer class="site-footer section-padding" id="contact">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-5 me-auto col-12">
+                        <h5 class="mb-lg-4 mb-3">Opening Hours</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex">Sunday : Closed</li>
+                            <li class="list-group-item d-flex">Monday - Friday <span>8:00 AM - 3:30 PM</span></li>
+                            <li class="list-group-item d-flex">Saturday <span>10:30 AM - 5:30 PM</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-12 my-4 my-lg-0">
+                        <h5 class="mb-lg-4 mb-3">Our Clinic</h5>
+                        <p><a href="mailto:hello@company.co">hello@company.co</a></p>
+                        <p>123 Digital Art Street, San Diego, CA 92123</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-12 ms-auto">
+                        <h5 class="mb-lg-4 mb-2">Socials</h5>
+                        <ul class="social-icon">
+                            <li><a href="#" class="social-icon-link bi-facebook"></a></li>
+                            <li><a href="#" class="social-icon-link bi-twitter"></a></li>
+                            <li><a href="#" class="social-icon-link bi-instagram"></a></li>
+                            <li><a href="#" class="social-icon-link bi-youtube"></a></li>
+                        </ul>
+                        <div>
+                            <p class="copyright-text">Copyright © Bien-Être+ 2021</p>
+                            <p class="copyright-text">Design: <a href="https://templatemo.com" target="_parent">TemplateMo</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+{% endblock %}
+        <!-- JavaScript Files -->
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+            <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+            <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+            <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
+            <script src="{{ asset('assets/js/scrollspy.min.js') }}"></script>
+            <script src="{{ asset('assets/js/custom.js') }}"></script>
+        {% endblock %}
+
+
+
+<script>
+    const eventSource = new EventSource('https://localhost/.well-known/mercure?topic=' + encodeURIComponent('consultation/'));
+
+    eventSource.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        console.log("Notification reçue:", data);
+        showNotification(data.message);
+    };
+
+    function showNotification(message) {
+        const notificationDiv = document.getElementById('notification');
+        notificationDiv.innerHTML = message;
+        notificationDiv.style.display = 'block';
+        setTimeout(() => { notificationDiv.style.display = 'none'; }, 5000); // Cache après 5 sec
+    }
+</script>
+
+<!-- Ajoute un élément pour afficher la notification -->
+<div id="notification" style="display:none; position: fixed; top: 10px; right: 10px; background: red; color: white; padding: 10px; border-radius: 5px;">
+</div>
+
+
+
+
+        {# CSS spécifique pour la pagination #}
+<style>
+.pagination {
+    display: flex;
+    justify-content: center;
+}
+
+.pagination a, .pagination span {
+    margin: 0 5px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #007bff;
+    border: 1px solid #ddd;
+}
+
+.pagination a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination .active {
+    background-color: #007bff;
+    color: white;
+}
+</style>
+{% endblock %}

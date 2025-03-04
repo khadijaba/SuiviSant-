@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use Knp\Snappy\Pdf;
 use App\Entity\Rapport;
 use App\Entity\Consultation;
 use App\Form\RapportType;
@@ -104,4 +104,8 @@ final class RapportController extends AbstractController
         // Rediriger vers la liste des rapports après la suppression
         return $this->redirectToRoute('app_rapport_index');
     }
+
+   
+
+
 }

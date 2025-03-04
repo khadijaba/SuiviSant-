@@ -1,58 +1,155 @@
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Consultation{% endblock %}
 
-   {% block body %}
+{% block title %}Admin Dashboard - Consultation{% endblock %}
 
-    <div class="container mt-4">
-        <h1 class="mb-3">Détails de la Consultation</h1>
+{% block body %}
 
-        <table class="table table-bordered">
-            <tbody>
-                <tr>
-                    <th>ID</th>
-                    <td>{{ consultation.id }}</td>
-                </tr>
-                <tr>
-                    <th>Date</th>
-                    <td>{{ consultation.date ? consultation.date|date('Y-m-d H:i:s') : 'Non spécifiée' }}</td>
-                </tr>
-                <tr>
-                    <th>Description</th>
-                    <td>{{ consultation.description }}</td>
-                </tr>
-            </tbody>
-        </table>
 
-        {# Vérification si un rapport est disponible #}
-        {% if consultation.rapport is null %}
-            <div class="alert alert-warning">
-                <p>Le rapport n'est pas encore disponible.</p>
-                <a href="{{ path('app_consultation_add_rapport', {'id': consultation.id}) }}" class="btn btn-primary">
-                    Ajouter un rapport
-                </a>
-            </div>
-        {% else %}
-            <div class="card mt-4">
-                <div class="card-header bg-success text-white">
-                    Rapport de Consultation
-                </div>
-                <div class="card-body">
-                    <p>{{ consultation.rapport.contenu }}</p>
-                </div>
-            </div>
-        {% endif %}
 
-        <div class="mt-4">
-            <a href="{{ path('app_consultation_index') }}" class="btn btn-secondary">Retour à la liste</a>
-            <a href="{{ path('app_consultation_edit', {'id': consultation.id}) }}" class="btn btn-warning">Modifier</a>
+ <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f6f9;
+        }
+        .sidebar {
+            background-color: #2c3e50;
+            min-height: 100vh;
+            color: #ecf0f1;
+            padding: 1rem;
+            width: 240px;
+            position: fixed;
+        }
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 0.8rem;
+            display: block;
+            border-radius: 5px;
+        }
+        .sidebar a:hover {
+            background-color: #34495e;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+            width: 100%;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        .card i {
+            font-size: 2.5rem;
+            color: #fff;
+        }
+        .card-blue { background-color: #3498db; color: #fff; }
+        .card-green { background-color: #2ecc71; color: #fff; }
+        .card-yellow { background-color: #f1c40f; color: #fff; }
+        .card-red { background-color: #e74c3c; color: #fff; }
+        .chart-container {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx1 = document.getElementById('userChart').getContext('2d');
+        var userChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Users',
+                    data: [50, 100, 150, 200, 250],
+                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                    borderColor: '#3498db',
+                    borderWidth: 2
+                }]
+            }
+        });
+
+        var ctx2 = document.getElementById('salesChart').getContext('2d');
+        var salesChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                datasets: [{
+                    label: 'Sales',
+                    data: [200, 400, 300, 500, 700],
+                    backgroundColor: '#2ecc71'
+                }]
+            }
+        });
+    </script>
+
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">Admin Dashboard</div>
+            <a href="#"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="#"><i class="fas fa-users"></i> Utilisateurs</a>
+            <a href="#"><i class="fas fa-calendar-alt"></i> Rendez-vous</a>
+            <a href="#"><i class="fas fa-book"></i> Ressources Éducatives</a>
+            <a href="{{ path('admin_consultation_index') }}"><i class="fas fa-notes-medical"></i> Consultations</a>
+            <a href="#"><i class="fas fa-comments"></i> Forum</a>
+            <a href="#"><i class="fas fa-chart-line"></i> Analytics</a>
+            <a href="#"><i class="fas fa-cog"></i> Settings</a>
         </div>
+        
+        <!-- Main Content -->
+        <div class="main-content container mt-4">
+            <h1 class="mb-3">Détails de la Consultation</h1>
 
-        {# Formulaire de suppression avec confirmation #}
-        <form action="{{ path('app_consultation_delete', {'id': consultation.id}) }}" method="post" class="mt-3" 
-              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette consultation ? Cette action est irréversible.')">
-            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ consultation.id) }}">
-            <button type="submit" class="btn btn-danger">Supprimer</button>
-        </form>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <td>{{ consultation.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <td>{{ consultation.date ? consultation.date|date('Y-m-d H:i:s') : 'Non spécifiée' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ consultation.description }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            {% if consultation.rapport is null %}
+                <div class="alert alert-warning">
+                    <p>Le rapport n'est pas encore disponible.</p>
+                    <a href="{{ path('app_consultation_add_rapport', {'id': consultation.id}) }}" class="btn btn-primary">Ajouter un rapport</a>
+                </div>
+            {% else %}
+                <div class="card mt-4">
+                    <div class="card-header bg-success text-white">Rapport de Consultation</div>
+                    <div class="card-body">
+                        <p>{{ consultation.rapport.contenu }}</p>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="mt-4">
+                <a href="{{ path('app_consultation_index') }}" class="btn btn-secondary">Retour à la liste</a>
+                <a href="{{ path('app_consultation_edit', {'id': consultation.id}) }}" class="btn btn-warning">Modifier</a>
+            </div>
+
+            <form action="{{ path('app_consultation_delete', {'id': consultation.id}) }}" method="post" class="mt-3" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette consultation ? Cette action est irréversible.')">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ consultation.id) }}">
+                <button type="submit" class="btn btn-danger">Supprimer</button>
+            </form>
+        </div>
     </div>
 {% endblock %}
+

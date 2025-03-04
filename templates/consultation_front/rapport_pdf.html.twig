@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport Consultation</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12pt; }
+        h1 { text-align: center; }
+        p { margin: 0.5em 0; }
+        .rapport { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Rapport de Consultation #{{ consultation.id }}</h1>
+
+   
+
+    <div class="rapport">
+        <h2>Contenu du Rapport :</h2>
+        <p>{{ rapport.contenu|raw }}</p>
+    </div>
+</body>
+</html>

@@ -12,7 +12,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+use Symfony\Bridge\Doctrine\Attribute\MapEntity; 
+use Symfony\Component\Mercure\PublisherInterface;
+use Symfony\Component\Mercure\Update;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\MailerInterface;
 #[Route('/consultation')]
 final class ConsultationController extends AbstractController
 {
@@ -52,6 +56,10 @@ final class ConsultationController extends AbstractController
             'rapport' => $consultation->getRapport(),
         ]);
     }
+
+
+
+
 
     #[Route('/{id}/edit', name: 'app_consultation_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Consultation $consultation, EntityManagerInterface $entityManager): Response
@@ -98,7 +106,7 @@ final class ConsultationController extends AbstractController
     
 
     #[Route('/{id}/add-rapport', name: 'app_consultation_add_rapport', methods: ['GET', 'POST'])]
-    public function addRapport(Request $request, Consultation $consultation, EntityManagerInterface $entityManager): Response
+    public function addRapport(Request $request, Consultation $consultation, EntityManagerInterface $entityManager, PublisherInterface $publisher): Response
     {
         if ($consultation->getRapport() !== null) {
             $this->addFlash('error', 'Un rapport est déjà attaché à cette consultation.');
@@ -110,10 +118,21 @@ final class ConsultationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Lier le rapport à la consultation
             $consultation->setRapport($rapport);
             $entityManager->persist($rapport);
             $entityManager->flush();
 
+            // Ajouter une notification via Mercure
+            $update = new Update(
+                'consultation/' . $consultation->getId(), // L'URL du sujet
+                json_encode(['message' => 'Un nouveau rapport a été ajouté à la consultation.'])
+            );
+
+            // Publier la notification
+            $publisher($update);
+
+            // Ajouter un message flash et rediriger
             $this->addFlash('success', 'Rapport ajouté avec succès.');
             return $this->redirectToRoute('app_consultation_show', ['id' => $consultation->getId()]);
         }
@@ -123,6 +142,7 @@ final class ConsultationController extends AbstractController
             'consultation' => $consultation,
         ]);
     }
+
     #[Route('/admin/consultations', name: 'admin_consultation_index')]
     public function adminIndex(ConsultationRepository $consultationRepository): Response
     {
@@ -132,7 +152,21 @@ final class ConsultationController extends AbstractController
             'consultations' => $consultations,
         ]);
     }
+    // Nouvelle route pour afficher les consultations sur le frontend
+    #[Route('/consultations', name: 'app_consultation_frontend', methods: ['GET'])]
+    public function frontendIndex(ConsultationRepository $consultationRepository): Response
+    {
+        // Récupérer toutes les consultations
+        $consultations = $consultationRepository->findAll();
+
+        // Passer les consultations à la vue
+        return $this->render('consultation/frontend.html.twig', [
+            'consultations' => $consultations,
+        ]);
+    }
+
+}
+
     
 
 
-}

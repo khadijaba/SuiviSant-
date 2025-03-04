@@ -1,0 +1,43 @@
+{# templates/consultation/frontend.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Consultations{% endblock %}
+
+{% block body %}
+    <h1>Liste des Consultations</h1>
+
+    {% if consultations is empty %}
+        <p>Aucune consultation disponible.</p>
+    {% else %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Rapport</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for consultation in consultations %}
+                    <tr>
+                        <td>{{ consultation.id }}</td>
+                        <td>{{ consultation.date|date('Y-m-d') }}</td>
+                        <td>
+                            {% if consultation.rapport %}
+                                {{ consultation.rapport.titre }}
+                            {% else %}
+                                Aucun rapport
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('app_consultation_show', { 'id': consultation.id }) }}" class="btn btn-info">Voir</a>
+                            {# Ajouter d'autres actions comme modifier ou supprimer si nécessaire #}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

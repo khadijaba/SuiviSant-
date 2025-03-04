@@ -1,0 +1,6 @@
+knp_paginator:
+    template:
+        pagination: '@KnpPaginator/Pagination/sliding.html.twig'
+        sortable: '@KnpPaginator/Pagination/sortable.html.twig'
+        filtration: '@KnpPaginator/Pagination/filtration.html.twig'
+        rel_links: '@KnpPaginator/Pagination/rel_links.html.twig'

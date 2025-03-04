@@ -1,0 +1,151 @@
+SELECT last_name, job_id, salary FROM employees
+WHERE ( job_id= 'SA_MAN' OR job_id= 'AD_VP' ) AND salary > 12000;
+
+
+
+SELECT first_name, last_name, job_id,
+CONCAT(first_name,last_name) "Nom et prenom",
+LENGTH (last_name) "longueur nom",
+INSTR(last_name,'a')"position a",
+LPAD(last_name,10,'*'),
+RPAD(last_name,10,'*')
+FROM employees
+WHERE SUBSTR(job_id, 4) = 'REP';
+30/90
+
+
+SELECT commission_pct+0.2,
+ROUND(commission_pct+0.2),
+TRUNC(commission_pct+0.2),
+FLOOR(commission_pct+0.2),
+CEIL(commission_pct+0.2)
+FROM employees where department_id=80;
+32/90
+
+SELECT first_name,
+(SYSDATE-hire_date) AS jours,
+(SYSDATE-hire_date)/7 AS semaines
+FROM employees;
+34/90
+
+
+
+SELECT systimestamp,
+extract(year from systimestamp) as Annee,
+extract(month from systimestamp) as Mois,
+extract(day from systimestamp) as Jour,
+extract(hour from systimestamp) as Hour,
+extract(minute from systimestamp) as Minutes,
+extract(second from systimestamp) as Secondes
+FROM dual;
+36/90
+
+
+
+SELECT last_name, TO_CHAR(hire_date, 'fm DD_Month_YYYY') AS HIREDATE FROM
+employees;
+
+Exemple 2
+SELECT first name, TO CHAR(salary, '$99,000.00') SALARY FROM employees;
+40/90
+
+
+
+select first_name, hire_date from employees
+where hire_date>to_date('01/01/1982','DD-MM-YYYY');
+Exemple 2
+Select first_name, salary_from employees
+where salary>=to number(’15000’);
+41/90
+
+
+
+
+select employee_id, 
+       last_name, 
+       salary,
+       case
+           when salary between 2000 and 3500 then 'Pauvre'
+           when salary between 3500 and 4500 then 'Moyenne'
+           when salary between 4500 and 7000 then 'Rich'
+           when salary > 7000 then 'Rich Plus'
+           else 'inconnu'
+       end as class_sociale
+from employees 
+where department_id = 60;
+
+
+**************************************************************
+
+// joiture naturelle:
+
+ SELECT department_id,department_name, location_id,city
+ FROM departments NATURAL JOIN locations
+ WHERE location_id <> 1700;
+
+
+// jointure interne
+
+ SELECT department_id,department_name, location_id,city
+ FROM departments INNER JOIN locations
+ USING(location_id)
+ WHERE location_id<>1700;
+
+SELECT department_id,department_name,departments.location_id,city
+ FROM departments INNER JOIN locations
+ ON departments.location_id=locations.location_id
+ WHEREdepartments.location_id<>1700;
+
+
+
+ create table tab2(
+    A number (2) primary key,
+    B varchar2(10),
+    C number (2));
+
+INSERT INTO tab2 (A, B, C) VALUES (3, 'a3', 4);
+INSERT INTO tab2 (A, B, C) VALUES (4, 'a4', 5);
+INSERT INTO tab2 (A, B, C) VALUES (5, 'a5', 6);
+INSERT INTO tab2 (A, B, C) VALUES (6, 'a6', 7);
+INSERT INTO tab2 (A, B, C) VALUES (7, 'a7', 8);
+INSERT INTO tab2 (A, B, C) VALUES (8, 'a8', 9);
+INSERT INTO tab2 (A, B, C) VALUES (9, 'a9', 10);
+
+// jointure interne
+
+SELECT tab1.a, tab1.b, tab2.a,tab2.b
+ FROM tab1 INNER JOIN tab2
+ ON tab1.a=tab2.a and tab1.b=tab2.b;
+
+
+// jointure externe
+
+ Exemple 1:
+ SELECT tab1.a, tab1.b,
+ tab2.a,tab2.b
+ FROM tab1 LEFT OUTER JOIN
+ tab2
+ ON tab1.a=tab2.a and
+ tab1.b=tab2.b;
+
+Exemple 2:
+ SELECT tab1.a, tab1.b,
+ tab2.a,tab2.b
+ FROM tab1 RIGHT OUTER JOIN
+ tab2
+ ON tab1.a=tab2.a and
+ tab1.b=tab2.b;
+
+ Exemple 3:
+ SELECT tab1.a, tab1.b,
+ tab2.a,tab2.b
+ FROM tab1 FULL OUTER JOIN
+ tab2
+ ON tab1.a=tab2.a and
+ tab1.b=tab2.b;
+
+
+ Exemple 1:
+ SELECT tab1.a, tab1.b, tab2.a,tab2.b
+ FROM tab1 LEFT OUTER JOIN tab2
+ ON tab1.a=tab2.a;

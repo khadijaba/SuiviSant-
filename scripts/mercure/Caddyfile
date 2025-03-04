@@ -1,0 +1,15 @@
+# Configuration de Mercure avec Caddy
+https://localhost {
+    # Rediriger toute demande HTTP vers HTTPS
+    redir http://localhost https://localhost
+
+    # Proxy inverse vers Mercure
+    reverse_proxy 127.0.0.1:3000
+     # Si vous utilisez des certificats auto-signés, vous pouvez les générer avec cette option :
+    tls self_signed
+
+    # Configurer les options supplémentaires si nécessaire
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    }
+}

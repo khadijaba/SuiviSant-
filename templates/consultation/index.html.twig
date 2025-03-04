@@ -1,37 +1,115 @@
- {% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Consultation index{% endblock %}
+{% block title %}Admin Dashboard - Consultations{% endblock %}
 
 {% block body %}
-    <h1>Consultation index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Date</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for consultation in consultations %}
-            <tr>
-                <td>{{ consultation.id }}</td>
-                <td>{{ consultation.date ? consultation.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ consultation.description }}</td>
-                <td>
-                    <a href="{{ path('app_consultation_show', {'id': consultation.id}) }}">show</a>
-                    <a href="{{ path('app_consultation_edit', {'id': consultation.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_consultation_new') }}">Create new</a>
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f6f9;
+    }
+    .sidebar {
+        background-color: #2c3e50;
+        min-height: 100vh;
+        color: #ecf0f1;
+        padding: 1rem;
+        position: fixed;
+        width: 240px;
+    }
+    .sidebar a {
+        color: #ecf0f1;
+        text-decoration: none;
+        font-size: 1rem;
+        padding: 0.8rem;
+        display: block;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+    .sidebar a:hover {
+        background-color: #34495e;
+    }
+    .sidebar .sidebar-header {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+    }
+    .main-content {
+        margin-left: 260px;
+        padding: 2rem;
+        width: 100%;
+
+    }
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
+    }
+    .card:hover {
+        transform: translateY(-10px);
+    }
+    .card i {
+        font-size: 2.5rem;
+        color: #fff;
+    }
+    .card-blue { background-color: #3498db; color: #fff; }
+    .card-green { background-color: #2ecc71; color: #fff; }
+    .card-yellow { background-color: #f1c40f; color: #fff; }
+    .card-red { background-color: #e74c3c; color: #fff; }
+    .chart-container {
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 1rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">Admin Dashboard</div>
+            <a href="#"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="#"><i class="fas fa-users"></i> Utilisateurs</a>
+            <a href="#"><i class="fas fa-calendar-check"></i> Rendez-vous</a>
+            <a href="#"><i class="fas fa-book"></i> Ressources Éducatives</a>
+            <a href="{{ path('admin_consultation_index') }}"><i class="fas fa-notes-medical"></i> Consultations</a>
+            <a href="#"><i class="fas fa-comments"></i> Forum</a>
+            <a href="#"><i class="fas fa-chart-line"></i> Analytics</a>
+            <a href="#"><i class="fas fa-cog"></i> Paramètres</a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content container-fluid">
+            <h1 class="my-4">Consultations</h1>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for consultation in consultations %}
+                    <tr>
+                        <td>{{ consultation.id }}</td>
+                        <td>{{ consultation.date ? consultation.date|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>{{ consultation.description }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="{{ path('app_consultation_show', {'id': consultation.id}) }}">Voir</a>
+                            <a class="btn btn-warning btn-sm" href="{{ path('app_consultation_edit', {'id': consultation.id}) }}">Modifier</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">Aucune consultation trouvée</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <a class="btn btn-success" href="{{ path('app_consultation_new') }}">Créer une nouvelle consultation</a>
+        </div>
+    </div>
 {% endblock %}

@@ -39,7 +39,7 @@ class Rapport
     #[Assert\NotBlank(message: "Le contenu du rapport ne peut pas être vide.")]
     #[Assert\Length(
         min: 30,
-        max: 1000,
+        max: 1000000000,
         minMessage: "Le contenu doit contenir au moins {{ limit }} caractères.",
         maxMessage: "Le contenu ne doit pas dépasser {{ limit }} caractères."
     )]
