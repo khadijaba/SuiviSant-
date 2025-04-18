@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.AfficherRController">
+    <children>
+        <TableView fx:id="tableRessources" layoutX="14" layoutY="14" prefWidth="700" prefHeight="400">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="colTitre" text="Titre" prefWidth="100"/>
+                <TableColumn fx:id="colContenu" text="Contenu" prefWidth="150"/>
+                <TableColumn fx:id="colAuteur" text="Auteur" prefWidth="100"/>
+                <TableColumn fx:id="colDate" text="Date" prefWidth="100"/>
+                <TableColumn fx:id="colCategorie" text="Catégorie" prefWidth="100"/>
+                <TableColumn fx:id="colModifier" text="Modifier" prefWidth="100"/>
+                <TableColumn fx:id="colSupprimer" text="Supprimer" prefWidth="100"/>
+            </columns>
+        </TableView>
+
+        <Button fx:id="btnAjouter" text="Ajouter Ressource" layoutX="580" layoutY="430" onAction="#ouvrirAjout"/>
+    </children>
+</AnchorPane>
