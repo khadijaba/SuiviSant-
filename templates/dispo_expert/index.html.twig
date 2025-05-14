@@ -1,0 +1,199 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dispo Expert List{% endblock %}
+
+{% block body %}
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">Admin Dashboard</div>
+        <a href="{{ path('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="{{ path('app_dispo_expert_index') }}" class="active"><i class="fas fa-users"></i> Disponibilité Expert</a>
+        <a href="{{ path('app_rendez_vous_index') }}"><i class="fas fa-calendar"></i> Rendez-vous</a>
+        <a href="#"><i class="fas fa-book"></i> Ressources Éducatives</a>
+        <a href="#"><i class="fas fa-comments"></i> Consultation</a>
+        <a href="#"><i class="fas fa-chart-line"></i> Analytics</a>
+        <a href="#"><i class="fas fa-cog"></i> Settings</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content flex-grow-1">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <div class="container-fluid">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search ..." aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-envelope"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-bell"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Content -->
+        <div class="container mt-4">
+            <h1 class="mb-4">Dispo Expert List</h1>
+
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Expert</th>  {# ADDED COLUMN #}
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Location</th>
+                        <th>Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dispoExpert in dispo_experts %}
+                        <tr>
+                            <td>{{ dispoExpert.id }}</td>
+                            <td>
+                                <strong>{{ dispoExpert.expert.name }}</strong> 
+                                <br> <small class="text-muted">{{ dispoExpert.expert.specialite }}</small>
+                            </td>
+                            <td>{{ dispoExpert.date|date('Y-m-d') }}</td>
+                            <td>
+                                <span class="badge {{ dispoExpert.status ? 'bg-success' : 'bg-danger' }}">
+                                    {{ dispoExpert.status ? 'Available' : 'Unavailable' }}
+                                </span>
+                            </td>
+                            <td>{{ dispoExpert.location }}</td>
+                            <td>{{ dispoExpert.time|date('H:i') }}</td>
+                            <td>
+                                <a href="{{ path('app_dispo_expert_show', {'id': dispoExpert.id}) }}" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Show
+                                </a>
+                                <a href="{{ path('app_dispo_expert_edit', {'id': dispoExpert.id}) }}" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <form action="{{ path('app_dispo_expert_delete', {'id': dispoExpert.id}) }}" method="post" style="display:inline;" 
+                                      onsubmit="return confirm('Are you sure you want to delete this entry?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ dispoExpert.id) }}">
+                                    <button class="btn btn-danger btn-sm" type="submit">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center">No dispo experts found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <a href="{{ path('app_dispo_expert_new') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New Dispo Expert
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f6f9;
+    }
+    .sidebar {
+        background-color: #2c3e50;
+        min-height: 100vh;
+        color: #ecf0f1;
+        padding: 1rem;
+        position: fixed;
+        width: 240px;
+    }
+    .sidebar a {
+        color: #ecf0f1;
+        text-decoration: none;
+        font-size: 1rem;
+        padding: 0.8rem;
+        display: block;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+    .sidebar a:hover, .sidebar a.active {
+        background-color: #34495e;
+    }
+    .sidebar .sidebar-header {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+    }
+    body, html {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    .main-content {
+        margin-left: 260px;
+        padding: 1rem;
+    }
+
+    .table {
+        background-color: #fff;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        margin-top: 20px;
+    }
+
+    .table th, .table td {
+        padding: 10px;
+        text-align: center;
+    }
+
+    .table th {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #f4f6f9;
+    }
+
+    .btn-sm {
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
+        border-radius: 0.25rem;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .actions a {
+        color: #3498db;
+        text-decoration: none;
+        font-size: 1.25rem;
+    }
+
+    .actions a:hover {
+        color: #2980b9;
+    }
+
+    .btn-create {
+        background-color: #3498db;
+        color: #fff;
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .btn-create:hover {
+        background-color: #2980b9;
+    }
+</style>
+
+{% endblock %}

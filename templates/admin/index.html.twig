@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f6f9;
+        }
+        .sidebar {
+            background-color: #2c3e50;
+            min-height: 100vh;
+            color: #ecf0f1;
+            padding: 1rem;
+            position: fixed;
+            width: 240px;
+        }
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.8rem;
+            display: block;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .sidebar a:hover {
+            background-color: #34495e;
+        }
+        .sidebar .sidebar-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        .card i {
+            font-size: 2.5rem;
+            color: #fff;
+        }
+        .card-blue { background-color: #3498db; color: #fff; }
+        .card-green { background-color: #2ecc71; color: #fff; }
+        .card-yellow { background-color: #f1c40f; color: #fff; }
+        .card-red { background-color: #e74c3c; color: #fff; }
+        .chart-container {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-header">Admin Dashboard</div>
+    <a href="#"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="{{ path('app_dispo_expert_index') }}"><i class="fas fa-users"></i> Disponibilité Expert</a>
+    <a href="{{ path('app_rendez_vous_index') }}"><i class="fas fa-calendar"></i> Rendez-vous</a>
+    <a href="#"><i class="fas fa-book"></i> Ressources Éducatives</a>
+    <a href="#"><i class="fas fa-comment-medical"></i> Consultation</a>
+    <a href="#"><i class="fas fa-comments"></i> Forum</a>
+    <a href="/programme_admin.php"><i class="fas fa-tasks"></i> Programme</a>
+    <a href="#"><i class="fas fa-cog"></i> Settings</a>
+</div>
+
+<div class="main-content">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+        <div class="container-fluid">
+            <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button type="submit" class="btn btn-search pe-1">
+                            <i class="fa fa-search search-icon"></i>
+                        </button>
+                    </div>
+                    <input type="text" placeholder="Search ..." class="form-control">
+                </div>
+            </nav>
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fa fa-user"></i> Admin
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fa fa-user-circle"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fa fa-cog"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="header">
+        <h1>Welcome to Admin Dashboard</h1>
+    </div>
+
+    <!-- Cards Section -->
+    <div class="row mt-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card card-blue p-3 text-center">
+                <i class="fa fa-users"></i>
+                <h4>150</h4>
+                <p>Active Users</p>
+            </div>
+        </div>
+        <!-- New Appointments Card -->
+<div class="col-lg-3 col-md-6">
+    <a href="{{ path('app_rendez_vous_index') }}" class="text-decoration-none">
+        <div class="card card-green p-3 text-center">
+            <i class="fa fa-calendar-check"></i>
+            <h4>{{ totalAppointments }}</h4>  <!-- Dynamically Display Total -->
+            <p>New Appointments</p>
+        </div>
+    </a>
+</div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card card-yellow p-3 text-center">
+                <i class="fa fa-chart-bar"></i>
+                <h4>200%</h4>
+                <p>Growth Rate</p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card card-red p-3 text-center">
+                <i class="fa fa-exclamation-triangle"></i>
+                <h4>5</h4>
+                <p>Pending Issues</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="chart-container mt-4">
+        <h4>Recent Activity</h4>
+        <ul class="list-group">
+            <li class="list-group-item"><i class="fa fa-user"></i> New user registered: <strong>John Doe</strong></li>
+            <li class="list-group-item"><i class="fa fa-calendar"></i> Appointment booked by <strong>Alice</strong></li>
+            <li class="list-group-item"><i class="fa fa-cog"></i> Settings updated by <strong>Admin</strong></li>
+            <li class="list-group-item"><i class="fa fa-envelope"></i> New message received</li>
+        </ul>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const userCtx = document.getElementById('userChart').getContext('2d');
+    const userChart = new Chart(userCtx, { type: 'line', data: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], datasets: [{ label: 'Users', data: [50, 75, 150, 200, 300], borderColor: '#3498db' }] } });
+    const salesCtx = document.getElementById('salesChart').getContext('2d');
+    const salesChart = new Chart(salesCtx, { type: 'bar', data: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], datasets: [{ label: 'Sales', data: [100, 200, 150, 300, 400], backgroundColor: '#2ecc71' }] } });
+</script>
+
+</body>
+</html>

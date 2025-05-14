@@ -1,0 +1,10 @@
+<h2>Appointment Confirmation</h2>
+<p>Dear Customer,</p>
+<p>Your appointment has been successfully booked.</p>
+<ul>
+    <li><strong>Expert:</strong> {{ rendezVous.dispoExpert.expert.name }}</li>
+    <li><strong>Date:</strong> {{ rendezVous.dispoExpert.date|date('F j, Y') }}</li>
+    <li><strong>Time:</strong> {{ rendezVous.dispoExpert.time|date('H:i') }}</li>
+    <li><strong>Location:</strong> {{ rendezVous.dispoExpert.location }}</li>
+</ul>
+<p>Thank you!</p>

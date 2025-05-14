@@ -1,17 +1,433 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>{% block title %} Bien-Être+ {% endblock %}</title>
+        <link rel="icon" href="{{ asset('assets/favicon.ico') }}">
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        <!-- FullCalendar CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+        <!-- CSS Files -->
+        {{ encore_entry_link_tags('app') }} <!-- Webpack Encore -->
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-icons.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/owl.theme.default.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/templatemo-medic-care.css') }}">
+
+        {% block stylesheets %}
+        <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+{% block body %}
+    <body id="top">
+        <main>
+            <!-- Navigation Bar -->
+            <nav class="navbar navbar-expand-lg bg-light fixed-top shadow-lg">
+                <div class="container">
+                    <a class="navbar-brand mx-auto d-lg-none" href="{{ path('app_home') }}">
+                        Bien-Être+
+                        <strong class="d-block">Health and Well-being</strong>
+                    </a>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item active"><a class="nav-link" href="#hero">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                        
+                            <a class="navbar-brand d-none d-lg-block" href="{{ path('app_home') }}">
+                                Bien-Être+
+                                <strong class="d-block">Health and Well-being</strong>
+                            </a>
+                            <li class="nav-item"><a class="nav-link" href="#reviews">Experts</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#programme">Programme</a></li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Hero Section (Carrousel) -->
+            <section class="hero" id="hero">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img src="{{ asset('assets/images/slider/portrait-successful-mid-adult-doctor-with-crossed-arms.jpg') }}" class="img-fluid" alt="">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="{{ asset('assets/images/slider/young-asian-female-dentist-white-coat-posing-clinic-equipment.jpg') }}" class="img-fluid" alt="">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="{{ asset('assets/images/slider/doctor-s-hand-holding-stethoscope-closeup.jpg') }}" class="img-fluid" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="heroText d-flex flex-column justify-content-center">
+                                <h1 class="mt-auto mb-2">
+                                    Better
+                                    <div class="animated-info">
+                                        <span class="animated-item">health</span>
+                                        <span class="animated-item">days</span>
+                                        <span class="animated-item">lives</span>
+                                    </div>
+                                </h1>
+                                <p class="mb-4">La santé et le bien-être vont au-delà de l'absence de maladie. Ils impliquent un équilibre physique, mental et social, nécessitant des habitudes saines pour une meilleure qualité de vie.</p>
+                                <div class="heroLinks d-flex flex-wrap align-items-center">
+                                    <a class="custom-link me-4" href="#about" data-hover="Learn More">Learn More</a>
+                                    <p class="contact-phone mb-0"><i class="bi-phone"></i> 010-020-0340</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section class="section-padding" id="about">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <h2 class="mb-lg-3 mb-3">Meet Dr. Carson</h2>
+                            <p>Protect yourself and others by wearing masks and washing hands frequently. Outdoor is safer than indoor for gatherings or holding events. People who get sick with Coronavirus disease (COVID-19) will experience mild to moderate symptoms and recover without special treatments.</p>
+                            <p>You can feel free to use this CSS template for your medical profession or health care related websites. You can <a rel="nofollow" href="http://paypal.me/templatemo" target="_blank">support us a little</a> via PayPal if this template is good and useful for your work.</p>
+                        </div>
+
+                        <!-- Years of Experience Section -->
+                        <div class="col-lg-4 col-md-5 col-12 mx-auto">
+                            <div class="featured-circle bg-white shadow-lg d-flex justify-content-center align-items-center">
+                                <p class="featured-text"><span class="featured-number">12</span> Years<br> of Experiences</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Programme Section -->
+            <section class="section-padding" id="programme">
+                <div class="container">
+                    <div class="row">
+                        <h2 class="text-center mb-lg-5 mb-4">Our Programme</h2>
+                        
+                        <div class="row">
+                            {% for programme in programmes|default([]) %}
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 shadow-sm border-primary">
+                                        <div class="card-header bg-primary text-white">
+                                            <h4 class="mb-0">{{ programme.nom }}</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <!-- QR Code -->
+                                            <div class="text-center mb-3">
+                                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data={{ programme.nom|url_encode }}" 
+                                                     alt="QR Code for {{ programme.nom }}"
+                                                     class="img-fluid border">
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <i class="bi bi-calendar-date me-2"></i>
+                                                <strong>Date:</strong> 
+                                                {% if programme.date is defined %}
+                                                    {{ programme.date|date('d/m/Y H:i') }}
+                                                {% else %}
+                                                    À déterminer
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <i class="bi bi-graph-up me-2"></i>
+                                                <strong>Progression:</strong> {{ programme.progression }}
+                                            </div>
+                                            
+                                            <!-- Star Rating System -->
+                                            <div class="mb-3">
+                                                <p class="mb-1"><strong>Évaluation:</strong></p>
+                                                <div class="rating-container" data-programme="{{ programme.nom }}">
+                                                    <div class="stars">
+                                                        <i class="bi bi-star fs-5 star" data-value="1"></i>
+                                                        <i class="bi bi-star fs-5 star" data-value="2"></i>
+                                                        <i class="bi bi-star fs-5 star" data-value="3"></i>
+                                                        <i class="bi bi-star fs-5 star" data-value="4"></i>
+                                                        <i class="bi bi-star fs-5 star" data-value="5"></i>
+                                                    </div>
+                                                    <small class="text-muted rating-count">(0 votes)</small>
+                                                </div>
+                                            </div>
+                                            
+                                            <button onclick="alert('Vous avez été inscrit au programme {{ programme.nom }} avec succès!')" 
+                                               class="btn btn-primary w-100 mt-3">
+                                                <i class="bi bi-check-circle me-2"></i> Participer
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="col-12 text-center">
+                                    <p class="text-muted">Aucun programme disponible actuellement.</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+           <!-- Testimonials Section -->
+<section class="section-padding pb-0" id="reviews">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-center mb-lg-5 mb-4 text-dark">Our Experts</h2>
+
+                <!-- Custom Navigation Buttons -->
+                <div class="d-flex justify-content-center mb-3">
+                    <button class="btn btn-outline-primary me-2 prev-btn">
+                        <i class="bi bi-arrow-left"></i> Prev
+                    </button>
+                    <button class="btn btn-outline-primary next-btn">
+                        Next <i class="bi bi-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Experts Carousel -->
+                <div class="owl-carousel reviews-carousel owl-theme">
+                    {% for expert in experts %}
+                        <figure class="reviews-thumb d-flex flex-column align-items-center text-center p-4 rounded shadow-lg bg-white position-relative"
+                                style="border: 2px solid #007bff; border-radius: 15px; transition: transform 0.3s ease-in-out;">
+                            
+                            <!-- Expert Image -->
+                            {% if expert.photo %}
+                                <img src="{{ asset('uploads/images/' ~ expert.photo) }}" 
+                                    class="img-fluid rounded-circle border border-primary shadow"
+                                    alt="Expert Photo"
+                                    style="width: 180px; height: 180px; object-fit: cover;">
+                            {% else %}
+                                <p class="text-muted">No Image</p>
+                            {% endif %}
+
+                            <!-- Expert Info -->
+                            <figcaption class="mt-3">
+                                <h4 class="text-dark fw-bold mb-1">{{ expert.name }}</h4>
+                                <p class="text-primary small mb-2"><i class="bi bi-briefcase"></i> Speciality: {{ expert.specialite }}</p>
+                                <p class="text-muted small mb-2"><i class="bi bi-award"></i> Experience: {{ expert.experience }} years</p>
+
+                                <!-- Book Rendez-Vous Button -->
+                                <a href="{{ path('app_expert_dispos', {'id': expert.id}) }}" class="btn btn-primary mt-2 fw-bold">
+                                    <i class="bi bi-calendar-check"></i> Book Rendez-Vous
+                                </a>
+                            </figcaption>
+                        </figure>
+                    {% else %}
+                        <p class="text-center text-muted">No experts available.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+           
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="site-footer section-padding" id="contact">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-5 me-auto col-12">
+                        <h5 class="mb-lg-4 mb-3">Opening Hours</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex">Sunday : Closed</li>
+                            <li class="list-group-item d-flex">Monday - Friday <span>8:00 AM - 3:30 PM</span></li>
+                            <li class="list-group-item d-flex">Saturday <span>10:30 AM - 5:30 PM</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-12 my-4 my-lg-0">
+                        <h5 class="mb-lg-4 mb-3">Our Clinic</h5>
+                        <p><a href="mailto:hello@company.co">hello@company.co</a></p>
+                        <p>123 Digital Art Street, San Diego, CA 92123</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-12 ms-auto">
+                        <h5 class="mb-lg-4 mb-2">Socials</h5>
+                        <ul class="social-icon">
+                            <li><a href="#" class="social-icon-link bi-facebook"></a></li>
+                            <li><a href="#" class="social-icon-link bi-twitter"></a></li>
+                            <li><a href="#" class="social-icon-link bi-instagram"></a></li>
+                            <li><a href="#" class="social-icon-link bi-youtube"></a></li>
+                        </ul>
+                        <div>
+                            <p class="copyright-text">Copyright © Bien-Être+ 2021</p>
+                            <p class="copyright-text">Design: <a href="https://templatemo.com" target="_parent">TemplateMo</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+{% endblock %}
+        <!-- JavaScript Files -->
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app')}}
+            <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+            <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+            <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
+            <script src="{{ asset('assets/js/scrollspy.min.js') }}"></script>
+            <script src="{{ asset('assets/js/custom.js') }}"></script>
+
+            <!-- FullCalendar JS -->
+            <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.min.js"></script>
+
+            <!-- JavaScript to Control Carousel -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var owl = $(".reviews-carousel");
+
+        owl.owlCarousel({
+            loop: true,
+            margin: 20,
+            nav: false, // Default nav disabled
+            dots: false, // Hide default dots
+            autoplay: true,
+            autoplayTimeout: 3000,
+            autoplayHoverPause: true,
+            responsive: {
+                0: { items: 1 },
+                600: { items: 2 },
+                1000: { items: 3 }
+            }
+        });
+
+        // Custom Navigation Buttons
+        $(".prev-btn").click(function() {
+            owl.trigger('prev.owl.carousel');
+        });
+
+        $(".next-btn").click(function() {
+            owl.trigger('next.owl.carousel');
+        });
+    });
+</script>
+
+<!-- Add CSS for star rating -->
+<style>
+    .rating-container {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    .stars {
+        display: inline-flex;
+        margin-right: 10px;
+    }
+    
+    .star {
+        color: #e0e0e0;
+        cursor: pointer;
+        padding: 0 2px;
+        transition: color 0.2s;
+    }
+    
+    .star.selected, 
+    .star.hovered {
+        color: #ffc107;
+    }
+</style>
+
+<!-- Add JavaScript for star rating -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ratingContainers = document.querySelectorAll('.rating-container');
+        
+        ratingContainers.forEach(container => {
+            const stars = container.querySelectorAll('.star');
+            const programmeName = container.dataset.programme;
+            
+            // Get stored rating from localStorage if available
+            const storedRating = localStorage.getItem(`programme_rating_${programmeName}`);
+            if (storedRating) {
+                updateStarDisplay(stars, parseInt(storedRating));
+            }
+            
+            stars.forEach(star => {
+                // Hover effect
+                star.addEventListener('mouseenter', () => {
+                    const value = parseInt(star.dataset.value);
+                    stars.forEach(s => {
+                        if (parseInt(s.dataset.value) <= value) {
+                            s.classList.add('hovered');
+                        } else {
+                            s.classList.remove('hovered');
+                        }
+                    });
+                });
+                
+                // Remove hover effect
+                container.addEventListener('mouseleave', () => {
+                    stars.forEach(s => s.classList.remove('hovered'));
+                });
+                
+                // Star click
+                star.addEventListener('click', () => {
+                    const value = parseInt(star.dataset.value);
+                    
+                    // Store the rating in localStorage
+                    localStorage.setItem(`programme_rating_${programmeName}`, value);
+                    
+                    // Update display
+                    updateStarDisplay(stars, value);
+                    
+                    // Update the vote count
+                    const countElement = container.querySelector('.rating-count');
+                    let count = parseInt(countElement.textContent.match(/\d+/)[0]) || 0;
+                    if (!star.classList.contains('selected')) {
+                        count++;
+                    }
+                    countElement.textContent = `(${count} votes)`;
+                    
+                    // In a real app, you'd send this to a server
+                    console.log(`Programme ${programmeName} rated ${value}/5`);
+                });
+            });
+        });
+        
+        function updateStarDisplay(stars, selectedValue) {
+            stars.forEach(s => {
+                if (parseInt(s.dataset.value) <= selectedValue) {
+                    s.classList.add('selected');
+                    s.classList.remove('bi-star');
+                    s.classList.add('bi-star-fill');
+                } else {
+                    s.classList.remove('selected');
+                    s.classList.remove('bi-star-fill');
+                    s.classList.add('bi-star');
+                }
+            });
+        }
+    });
+</script>
+        {% endblock %}
     </body>
 </html>
