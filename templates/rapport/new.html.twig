@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un Rapport{% endblock %}
+
+{% block body %}
+    <h1>Ajouter un rapport pour la consultation du {{ consultation.dateConsultation|date('d/m/Y') }}</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.contenu) }}
+        <button class="btn btn-primary" type="submit">Ajouter le rapport</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_consultation_show', {'id': consultation.id}) }}" class="btn btn-secondary mt-3">Retour à la consultation</a>
+{% endblock %}

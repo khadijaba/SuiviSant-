@@ -1,0 +1,35 @@
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php'; // Si tu utilises Composer
+
+// Instanciation de l'objet PHPMailer
+$mail = new PHPMailer(true);
+
+try {
+    // Configuration du serveur SMTP
+    $mail->isSMTP();                                            // Paramétrage du serveur SMTP
+    $mail->Host       = 'smtp.gmail.com';                        // Serveur SMTP Gmail
+    $mail->SMTPAuth   = true;                                    // Activer l'authentification SMTP
+    $mail->Username   = 'benayedkhadija5@gmail.com';                   // Ton adresse email Gmail
+    $mail->Password   = 'khadijabenayed12';                  // Mot de passe de l'application Gmail
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;          // Sécuriser la connexion avec STARTTLS
+    $mail->Port       = 465;                                     // Port pour une connexion sécurisée
+
+    // Paramétrage de l'email
+    $mail->setFrom('benayedkhadija5@gmail.com', 'Nom de l\'expéditeur'); // Adresse de l'expéditeur
+    $mail->addAddress('khadija.benayed@esprit.tn');              // Adresse du destinataire
+
+    // Contenu du message
+    $mail->isHTML(true);                                         // Le message sera en HTML
+    $mail->Subject = 'SMTP test from smtp.gmail.com';
+    $mail->Body    = '<b>Test message</b>';
+    $mail->AltBody = 'Test message';                             // Corps de l'email en texte brut pour les clients ne supportant pas HTML
+
+    // Envoi de l'email
+    $mail->send();
+    echo 'Message has been sent';
+} catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}

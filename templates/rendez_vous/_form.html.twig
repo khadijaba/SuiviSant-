@@ -1,0 +1,89 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+<nav class="navbar navbar-expand-lg bg-light fixed-top shadow-lg">
+    <div class="container">
+        <!-- Mobile Brand -->
+        <a class="navbar-brand mx-auto d-lg-none" href="{{ path('app_home') }}">
+            Bien-Être+
+            <strong class="d-block">Health and Well-being</strong>
+        </a>
+
+        <!-- Navbar Toggler for Mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item {% if app.request.get('_route') == 'app_home' %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('app_home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+
+                <!-- Centered Brand for Large Screens -->
+                <a class="navbar-brand d-none d-lg-block" href="{{ path('app_home') }}">
+                    Bien-Être+
+                    <strong class="d-block">Health and Well-being</strong>
+                </a>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#reviews">Experts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#timeline">Timeline</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+<section id="booking">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-12 mx-auto">
+                <div class="booking-form" style="margin-top: 50px;">
+                    <h2 class="text-center mb-lg-3 mb-2">Book an appointment</h2>
+                    
+                    <div class="row">
+                        <div class="col-lg-6 col-12">
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email Address'}}) }}
+                            <div class="error-message">{{ form_errors(form.email) }}</div>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'Phone: 123-456-7890'}}) }}
+                            <div class="error-message">{{ form_errors(form.phoneNumber) }}</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_widget(form.message, {'attr': {'class': 'form-control', 'placeholder': 'Your message...'}}) }}
+                        <div class="error-message">{{ form_errors(form.message) }}</div>
+                    </div>
+
+                    <!-- Prefilled DispoExpert Field -->
+                    <div class="mb-3">
+                        
+                        {{ form_widget(form.dispoExpert, {
+                            'attr': {
+                                'class': 'form-control',
+                                'readonly': 'readonly' 
+                            }
+                        }) }}
+                        <div class="error-message">{{ form_errors(form.dispoExpert) }}</div>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{ form_end(form) }}

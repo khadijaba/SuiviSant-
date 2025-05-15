@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Experts{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .expert-card {
+            transition: transform 0.3s ease-in-out;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .expert-card:hover {
+            transform: translateY(-5px);
+        }
+        .expert-photo {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .specialite-badge {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        .experience-badge {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 mb-0">Gestion des Experts</h1>
+        <a href="{{ path('app_expert_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus-circle me-2"></i>Nouvel Expert
+        </a>
+    </div>
+
+    <div class="row">
+        {% for expert in experts %}
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card expert-card">
+                    <div class="card-body text-center">
+                        {% if expert.photo %}
+                            <img src="{{ asset('uploads/images/' ~ expert.photo) }}" 
+                                 alt="{{ expert.name }}" 
+                                 class="expert-photo">
+                        {% else %}
+                            <div class="expert-photo bg-secondary d-flex align-items-center justify-content-center">
+                                <i class="fas fa-user-md fa-3x text-white"></i>
+                            </div>
+                        {% endif %}
+
+                        <h5 class="card-title mb-3">{{ expert.name }}</h5>
+                        
+                        <div class="d-flex justify-content-center gap-2 mb-3">
+                            <span class="specialite-badge">
+                                <i class="fas fa-stethoscope me-1"></i>
+                                {{ expert.specialite }}
+                            </span>
+                            <span class="experience-badge">
+                                <i class="fas fa-clock me-1"></i>
+                                {{ expert.Experience }} ans
+                            </span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <a href="{{ path('app_expert_show', {'id': expert.id}) }}" 
+                               class="btn btn-info btn-sm flex-grow-1">
+                                <i class="fas fa-eye me-1"></i>Voir
+                            </a>
+                            <a href="{{ path('app_expert_edit', {'id': expert.id}) }}" 
+                               class="btn btn-warning btn-sm flex-grow-1">
+                                <i class="fas fa-edit me-1"></i>Modifier
+                            </a>
+                            <form method="post" action="{{ path('app_expert_delete', {'id': expert.id}) }}" 
+                                  class="flex-grow-1 m-0"
+                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet expert ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ expert.id) }}">
+                                <button class="btn btn-danger btn-sm w-100">
+                                    <i class="fas fa-trash-alt me-1"></i>Supprimer
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Aucun expert trouvé.
+                    <a href="{{ path('app_expert_new') }}" class="alert-link">Ajouter votre premier expert</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

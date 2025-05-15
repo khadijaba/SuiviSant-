@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ressources Éducatives{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .resource-card {
+            transition: transform 0.3s ease-in-out;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .resource-card:hover {
+            transform: translateY(-5px);
+        }
+        .resource-image {
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .resource-content {
+            max-height: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+        .author-badge {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        .date-badge {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 mb-0">Ressources Éducatives</h1>
+        <a href="{{ path('app_ressource_educative_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus-circle me-2"></i>Nouvelle Ressource
+        </a>
+    </div>
+
+    <div class="row">
+        {% for ressource in ressource_educatives %}
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card resource-card">
+                    {% if ressource.image %}
+                        <img src="{{ asset('uploads/images/' ~ ressource.image) }}" 
+                             class="resource-image" 
+                             alt="{{ ressource.titre }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ ressource.titre }}</h5>
+                        
+                        <div class="d-flex gap-2 mb-3">
+                            <span class="author-badge">
+                                <i class="fas fa-user me-1"></i>
+                                {{ ressource.auteur }}
+                            </span>
+                            <span class="date-badge">
+                                <i class="fas fa-calendar me-1"></i>
+                                {{ ressource.datePublication ? ressource.datePublication|date('d/m/Y') : '' }}
+                            </span>
+                        </div>
+
+                        <p class="card-text resource-content">{{ ressource.contenu }}</p>
+
+                        {% if ressource.video %}
+                            <div class="mb-3">
+                                <a href="{{ ressource.video }}" 
+                                   target="_blank" 
+                                   class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-play-circle me-1"></i>Voir la vidéo
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        <div class="d-flex gap-2">
+                            <a href="{{ path('app_ressource_educative_show', {'id': ressource.id}) }}" 
+                               class="btn btn-info btn-sm flex-grow-1">
+                                <i class="fas fa-eye me-1"></i>Voir
+                            </a>
+                            <a href="{{ path('app_ressource_educative_edit', {'id': ressource.id}) }}" 
+                               class="btn btn-warning btn-sm flex-grow-1">
+                                <i class="fas fa-edit me-1"></i>Modifier
+                            </a>
+                            <form method="post" action="{{ path('app_ressource_educative_delete', {'id': ressource.id}) }}" 
+                                  class="flex-grow-1 m-0"
+                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette ressource ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ressource.id) }}">
+                                <button class="btn btn-danger btn-sm w-100">
+                                    <i class="fas fa-trash-alt me-1"></i>Supprimer
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Aucune ressource éducative trouvée.
+                    <a href="{{ path('app_ressource_educative_new') }}" class="alert-link">Créer votre première ressource</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

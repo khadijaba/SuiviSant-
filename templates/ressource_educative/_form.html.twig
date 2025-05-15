@@ -1,0 +1,21 @@
+{{ form_start(form,{'attr': {'novalidate': 'novalidate'}} ) }}
+    <div>
+        {{ form_label(form.titre) }}
+        {{ form_widget(form.titre) }}
+        {{ form_errors(form.titre) }} 
+    </div>
+
+    <div>
+        {{ form_label(form.contenu) }}
+        {{ form_widget(form.contenu) }}
+        {{ form_errors(form.contenu) }}
+    </div>
+
+    <div>
+        {{ form_label(form.video) }}
+        {{ form_widget(form.video) }}
+        {{ form_errors(form.video) }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+{{ form_end(form) }}

@@ -1,0 +1,8 @@
+<?php
+if (function_exists('mime_content_type')) {
+    echo "Fileinfo is enabled. \n";
+    echo mime_content_type('test.jpg');
+} else {
+    echo "Fileinfo is NOT enabled!";
+}
+?>

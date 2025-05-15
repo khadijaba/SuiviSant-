@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le Rapport{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header">
+            <h1 class="h3 mb-0">Modifier le Rapport du {{ rapport.date|date('d/m/Y') }}</h1>
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button class="btn btn-warning">Enregistrer</button>
+                <a href="{{ path('app_rapport_index', {'consultation': rapport.consultation.id}) }}" class="btn btn-secondary">Annuler</a>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %} 

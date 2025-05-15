@@ -1,0 +1,5 @@
+{# templates/profile/index.html.twig #}
+<h1>Bienvenue {{ user.username }}</h1>
+
+<p>Vous êtes connecté avec le rôle : {{ user.roles | join(', ') }}</p>
+<a href="{{ path('logout') }}">Se déconnecter</a>

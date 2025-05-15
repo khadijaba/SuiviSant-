@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Ressource Éducative{% endblock %}
+
+{% block body %}
+<div class="sidebar">
+    <div class="sidebar-header">Admin Dashboard</div>
+    <a href="#"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="#"><i class="fas fa-users"></i> Utilisateurs</a>
+    <a href="#"><i class="fas fa-calendar-check"></i> Rendez-vous</a>
+    <a href="#ressources" class="btn btn-primary">Ressources Éducatives</a>
+    <a href="#"><i class="fas fa-stethoscope"></i> Consultation</a>
+    <a href="#"><i class="fas fa-comments"></i> Forum</a>
+    <a href="#"><i class="fas fa-chart-line"></i> Analytics</a>
+    <a href="#"><i class="fas fa-cog"></i> Settings</a>
+</div>
+
+<div class="main-content">
+    <h1>Edit Ressource Éducative</h1>
+
+    {{ include('ressource_educative/_form.html.twig', {'button_label': 'Update'}) }}
+    <a href="{{ path('app_ressource_educative_index') }}">Retour à la liste</a>
+    {{ include('ressource_educative/_delete_form.html.twig') }}
+
+    <div class="row mt-5">
+        <div class="col-md-6 chart-container">
+            <canvas id="userChart"></canvas>
+        </div>
+        <div class="col-md-6 chart-container">
+            <canvas id="salesChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const userCtx = document.getElementById('userChart').getContext('2d');
+    new Chart(userCtx, { type: 'line', data: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], datasets: [{ label: 'Users', data: [50, 75, 150, 200, 300], borderColor: '#3498db' }] } });
+
+    const salesCtx = document.getElementById('salesChart').getContext('2d');
+    new Chart(salesCtx, { type: 'bar', data: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], datasets: [{ label: 'Sales', data: [100, 200, 150, 300, 400], backgroundColor: '#2ecc71' }] } });
+</script>
+
+<style>
+    body { font-family: 'Roboto', sans-serif; background-color: #f4f6f9; }
+    .sidebar { background-color: #2c3e50; min-height: 100vh; color: #ecf0f1; padding: 1rem; position: fixed; width: 240px; }
+    .sidebar a { color: #ecf0f1; text-decoration: none; font-size: 1rem; padding: 0.8rem; display: block; margin-bottom: 10px; border-radius: 5px; }
+    .sidebar a:hover { background-color: #34495e; }
+    .main-content { margin-left: 260px; padding: 2rem; }
+    .chart-container { background-color: #fff; border-radius: 15px; padding: 1rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+</style>
+{% endblock %}

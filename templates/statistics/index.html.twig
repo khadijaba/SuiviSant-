@@ -1,0 +1,125 @@
+{# templates/statistics/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques des Ressources{% endblock %}
+
+{% block body %}
+    <h1>Statistiques des Ressources Éducatives par Catégorie</h1>
+
+    {# Vérification si des résultats existent #}
+    {% if results is not empty %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Catégorie</th>
+                    <th>Total des Ressources</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ result.categoryName }}</td>
+                        <td>{{ result.totalResources }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Graphique avec Chart.js -->
+        <div style="width: 80%; margin: auto;">
+            <canvas id="resourcesChart" width="400" height="400" style="display: block; box-sizing: border-box; width: 400px; height: 400px;"></canvas>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Récupération des données depuis le template Symfony
+            const data = {{ results|json_encode|raw }};
+            
+            // Préparer les labels (noms des catégories) et les valeurs (nombre de ressources)
+            const labels = data.map(item => item.categoryName);
+            const values = data.map(item => item.totalResources);
+
+            // Initialisation du graphique
+            const ctx = document.getElementById('resourcesChart').getContext('2d');
+            const resourcesChart = new Chart(ctx, {
+                type: 'pie', // Type de graphique (cercle ici)
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ressources éducatives par catégorie',
+                        data: values,
+                        backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#FFDB33'],
+                        borderColor: ['#fff', '#fff', '#fff', '#fff', '#fff'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw + ' ressources';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+    {% else %}
+        <div class="alert alert-info">
+            Aucune ressource éducative trouvée pour cette catégorie.
+        </div>
+    {% endif %}
+
+    <script>
+    // Vérification des données envoyées depuis Symfony
+    const data = {{ results|json_encode|raw }};
+    console.log(data); // Afficher les données dans la console
+
+    // Préparer les labels (noms des catégories) et les valeurs (nombre de ressources)
+    const labels = data.map(item => item.categoryName);
+    const values = data.map(item => item.totalResources);
+
+    // Vérification des labels et des valeurs
+    console.log(labels); // Vérifier les labels
+    console.log(values); // Vérifier les valeurs
+
+    // Initialisation du graphique
+    const ctx = document.getElementById('resourcesChart').getContext('2d');
+    const resourcesChart = new Chart(ctx, {
+        type: 'pie', // Type de graphique (cercle ici)
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Ressources éducatives par catégorie',
+                data: values,
+                backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#FFDB33'],
+                borderColor: ['#fff', '#fff', '#fff', '#fff', '#fff'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw + ' ressources';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+<script src="{{ asset('js/resourcesChart.js') }}"></script>
+
+{% endblock %}

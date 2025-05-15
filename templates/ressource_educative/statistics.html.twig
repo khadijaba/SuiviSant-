@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques des Ressources{% endblock %}
+
+{% block body %}
+    <h1>Statistiques des Ressources Educatives</h1>
+
+    <p>Total des ressources éducatives : {{ totalRessources }}</p>
+
+    <h2>Répartition par catégorie :</h2>
+    <ul>
+        {% for category in categoriesStats %}
+            <li>{{ category.categorie }}: {{ category.total }} ressources</li>
+        {% endfor %}
+    </ul>
+
+    <p>Nombre moyen de ressources par utilisateur : {{ averageRessourcesPerUser }}</p>
+{% endblock %}

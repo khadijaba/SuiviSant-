@@ -1,0 +1,38 @@
+
+
+{% block title %}CategorieRessource{% endblock %}
+
+{% block body %}
+    <h1>CategorieRessource</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ categorie_ressource.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ categorie_ressource.nom }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ categorie_ressource.description }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ categorie_ressource.image }}</td>
+            </tr>
+            <tr>
+                <th>DateCreation</th>
+                <td>{{ categorie_ressource.dateCreation ? categorie_ressource.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_categorie_ressource_index') }}">back to list</a>
+
+    <a href="{{ path('app_categorie_ressource_edit', {'id': categorie_ressource.id}) }}">edit</a>
+
+    {{ include('categorie_ressource/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_dispo_expert_delete', {'id': dispo_expert.id}) }}" style="display: inline;">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ dispo_expert.id) }}">
+    <button class="btn btn-danger">Delete</button>
+</form>

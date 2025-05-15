@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion Administrateur{% endblock %}
+
+{% block content_no_auth %}
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title text-center mb-4">Connexion Administrateur</h1>
+
+            <form action="{{ path('app_login_admin') }}" method="post">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" name="email" value="{{ last_username }}" class="form-control" required autofocus>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                {% if error %}
+                    <div class="alert alert-danger">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Se connecter</button>
+                </div>
+            </form>
+
+            <div class="mt-3 text-center">
+                <a href="{{ path('app_login_frontend') }}">Espace patient</a>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

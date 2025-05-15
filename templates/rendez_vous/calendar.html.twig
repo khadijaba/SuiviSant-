@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendrier des rendez-vous - {{ expert.name }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.css' rel='stylesheet' />
+    <style>
+        .calendar-container {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 1200px;
+        }
+        .expert-info {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .expert-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+        .fc-event {
+            cursor: pointer;
+        }
+        .fc-event:hover {
+            opacity: 0.9;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="expert-info">
+            {% if expert.photo %}
+                <img src="{{ asset('uploads/images/' ~ expert.photo) }}" 
+                     alt="{{ expert.name }}" 
+                     class="expert-photo">
+            {% endif %}
+            <h2>{{ expert.name }}</h2>
+            <p class="text-muted">{{ expert.specialite }}</p>
+            <p>{{ expert.experience }} années d'expérience</p>
+        </div>
+
+        <div class="calendar-container">
+            <div id="calendar"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/fr.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'fr',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: [
+                    {% for dispo in disponibilites %}
+                        {
+                            title: 'Disponible',
+                            start: '{{ dispo.date|date('Y-m-d') }}T{{ dispo.time|date('H:i:s') }}',
+                            backgroundColor: '{{ dispo.status ? "#28a745" : "#dc3545" }}',
+                            extendedProps: {
+                                location: '{{ dispo.location }}',
+                                status: '{{ dispo.status ? "Disponible" : "Non disponible" }}'
+                            }
+                        }{% if not loop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                eventClick: function(info) {
+                    if (info.event.extendedProps.status === 'Disponible') {
+                        if (confirm('Voulez-vous prendre rendez-vous à cette date ?')) {
+                            window.location.href = '{{ path('app_rendez_vous_new') }}?dispo=' + info.event.id;
+                        }
+                    } else {
+                        alert('Cette plage horaire n\'est pas disponible.');
+                    }
+                }
+            });
+            calendar.render();
+        });
+    </script>
+{% endblock %} 

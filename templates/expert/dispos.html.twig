@@ -1,0 +1,181 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ expert.name }} - Availability{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-expand-lg bg-light fixed-top shadow-lg">
+    <div class="container">
+        <!-- Mobile Brand -->
+        <a class="navbar-brand mx-auto d-lg-none" href="{{ path('app_home') }}">
+            Bien-Être+
+            <strong class="d-block">Health and Well-being</strong>
+        </a>
+
+        <!-- Navbar Toggler for Mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item {% if app.request.get('_route') == 'app_home' %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('app_home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+
+                <!-- Centered Brand for Large Screens -->
+                <a class="navbar-brand d-none d-lg-block" href="{{ path('app_home') }}">
+                    Bien-Être+
+                    <strong class="d-block">Health and Well-being</strong>
+                </a>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#reviews">Experts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#timeline">Timeline</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h1 class="text-center text-dark">{{ expert.name }}'s Availability</h1>
+
+    <div class="text-center mb-4">
+        <p><strong>Speciality:</strong> {{ expert.specialite }}</p>
+        <p><strong>Experience:</strong> {{ expert.experience }} years</p>
+        
+    </div>
+
+    <!-- Calendar Wrapper -->
+    <div class="calendar-container">
+        <div id="calendar"></div>
+    </div>
+</div>
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction/main.min.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            height: '600px',
+            aspectRatio: 1.5,
+            events: "{{ path('app_expert_dispos', {'id': expert.id}) }}?json=true",
+
+            eventDidMount: function (info) {
+                var status = info.event.extendedProps.status;
+                var eventElement = info.el;
+
+                if (status === 'Available') {
+                    eventElement.style.backgroundColor = '#28a745';  // Green for available
+                    eventElement.style.border = '3px solid white';
+                    eventElement.style.padding = '12px';
+                    eventElement.style.fontSize = '1.3rem';
+                    eventElement.style.borderRadius = '10px';
+                    eventElement.style.fontWeight = 'bold';
+                    eventElement.style.color = 'white';
+                    eventElement.style.cursor = 'pointer';
+                } else {
+                    eventElement.style.backgroundColor = '#dc3545';  // Red for unavailable
+                    eventElement.style.borderRadius = '5px';
+                    eventElement.style.color = 'white';
+                    eventElement.style.cursor = 'not-allowed';
+                }
+            },
+
+            eventClick: function(info) {
+    console.log("Event Clicked:", info.event);
+    console.log("Extended Props:", info.event.extendedProps); // Debug extendedProps
+
+    var dispoId = info.event.extendedProps.dispoId;
+
+    if (!dispoId) {
+        alert("Error: No dispoId found for this event!");
+        return;
+    }
+
+    if (info.event.extendedProps.status !== 'Available') {
+        alert("This slot is unavailable. Please select another time.");
+        return;
+    }
+
+    window.location.href = "{{ path('app_rendez_vous_new') }}?dispoId=" + dispoId;
+}
+        });
+
+        calendar.render();
+    });
+</script>
+
+
+    <style>
+        /* Calendar Styling */
+        .calendar-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #calendar {
+            border-radius: 10px;
+        }
+        
+        .fc-toolbar-title {
+            font-size: 1.7rem;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .fc-button {
+            background-color: #007bff !important;
+            border: none !important;
+            color: white !important;
+            padding: 7px 12px;
+            font-size: 1rem;
+            border-radius: 6px !important;
+        }
+        
+        .fc-button:hover {
+            background-color: #0056b3 !important;
+        }
+        
+        /* Enlarged Event Marks */
+        .fc-daygrid-event {
+            font-size: 1.3rem !important;
+            padding: 12px !important;
+            text-align: center;
+            border-radius: 10px !important;
+            font-weight: bold !important;
+            color: white !important;
+            cursor: pointer !important;
+        }
+
+        /* Unavailable events cursor */
+        .fc-daygrid-event[style*="background-color: #dc3545"] {
+            cursor: not-allowed !important;
+        }
+    </style>
+{% endblock %}
+{% endblock %}

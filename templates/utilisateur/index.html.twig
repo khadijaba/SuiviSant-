@@ -1,0 +1,501 @@
+{% extends 'base_patient.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/espace-patient.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/templatemo-medic-care.css') }}">
+    <style>
+        .rating-container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .stars {
+            display: inline-flex;
+            margin-right: 10px;
+        }
+        .star {
+            color: #e0e0e0;
+            cursor: pointer;
+            padding: 0 2px;
+            transition: color 0.2s;
+        }
+        .star.selected, 
+        .star.hovered {
+            color: #ffc107;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}Mon Espace Patient{% endblock %}
+
+{% block body %}
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+    <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="heroText d-flex flex-column justify-content-center">
+                        <h1 class="display-4">Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h1>
+                        <p class="lead mb-4">Votre espace personnel pour gérer votre santé et votre bien-être.</p>
+                        <div class="d-flex">
+                <a href="{{ path('app_logout') }}" class="btn btn-light btn-lg">
+                    <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+    </section>
+
+    <div class="container fade-in mt-5">
+        <!-- MLF Section -->
+    <div class="card shadow-sm mb-5">
+            <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="h4 mb-0">
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        Medical Learning Framework
+                </h3>
+                    <span class="badge bg-light text-primary">Nouveau</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fas fa-book-medical fa-3x text-primary mb-3"></i>
+                                <h5>Ressources Médicales</h5>
+                                <p class="text-muted">Accédez à notre bibliothèque de ressources médicales.</p>
+                                <a href="#" class="btn btn-outline-primary">Explorer</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fas fa-tasks fa-3x text-success mb-3"></i>
+                                <h5>Mes Progrès</h5>
+                                <p class="text-muted">Suivez votre progression et vos accomplissements.</p>
+                                <a href="#" class="btn btn-outline-success">Voir mes progrès</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users fa-3x text-info mb-3"></i>
+                                <h5>Communauté</h5>
+                                <p class="text-muted">Échangez avec d'autres professionnels de santé.</p>
+                                <a href="#" class="btn btn-outline-info">Rejoindre</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ressources Éducatives Section -->
+        <div class="card shadow-sm mb-5">
+            <div class="card-header bg-info text-white">
+                <h3 class="h4 mb-0">
+                    <i class="fas fa-book-medical me-2"></i>
+                    Ressources Éducatives
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for ressource in ressources_educatives %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                {% if ressource.image %}
+                                    <img src="{{ asset('uploads/images/' ~ ressource.image) }}" 
+                                         class="card-img-top" 
+                                         alt="{{ ressource.titre }}"
+                                         style="height: 200px; object-fit: cover;">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ ressource.titre }}</h5>
+                                    <p class="card-text text-muted mb-2">
+                                        <small>
+                                            <i class="fas fa-user me-1"></i> {{ ressource.auteur }}
+                                        </small>
+                                    </p>
+                                    <p class="card-text text-muted mb-2">
+                                        <small>
+                                            <i class="fas fa-calendar me-1"></i> 
+                                            {{ ressource.datePublication|date('d/m/Y') }}
+                                        </small>
+                                    </p>
+                                    <p class="card-text">
+                                        {{ ressource.contenu|slice(0, 100) }}...
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="badge bg-primary">
+                                            {{ ressource.categorie.nom }}
+                                        </span>
+                                        <button type="button" 
+                                                class="btn btn-outline-primary btn-sm"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#ressourceModal{{ ressource.id }}">
+                                            <i class="fas fa-eye me-1"></i> Lire plus
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal pour chaque ressource -->
+                        <div class="modal fade" id="ressourceModal{{ ressource.id }}" tabindex="-1">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">{{ ressource.titre }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {% if ressource.image %}
+                                            <img src="{{ asset('uploads/images/' ~ ressource.image) }}" 
+                                                 class="img-fluid mb-3" 
+                                                 alt="{{ ressource.titre }}">
+                                        {% endif %}
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <span class="text-muted">
+                                                <i class="fas fa-user me-1"></i> {{ ressource.auteur }}
+                                            </span>
+                                            <span class="text-muted">
+                                                <i class="fas fa-calendar me-1"></i> 
+                                                {{ ressource.datePublication|date('d/m/Y') }}
+                                            </span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <span class="badge bg-primary">{{ ressource.categorie.nom }}</span>
+                                        </div>
+                                        {% if ressource.video %}
+                                            <div class="ratio ratio-16x9 mb-3">
+                                                <iframe src="{{ ressource.video }}" 
+                                                        title="{{ ressource.titre }}" 
+                                                        allowfullscreen></iframe>
+                                            </div>
+                                        {% endif %}
+                                        <div class="content">
+                                            {{ ressource.contenu|nl2br }}
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-12">
+                            <div class="alert alert-info text-center">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Aucune ressource éducative disponible pour le moment.
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Consultations Section -->
+        <div class="card shadow-sm mb-5">
+            <div class="card-header bg-success text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="h4 mb-0">
+                        <i class="fas fa-calendar-check me-2"></i>
+                        Mes Consultations
+                    </h3>
+                    <span class="badge bg-light text-success">{{ consultations|length }} consultation(s)</span>
+                </div>
+            </div>
+            <div class="card-body">
+            {% if consultations is empty %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                        <p class="lead text-muted">Vous n'avez pas encore de consultations.</p>
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Statut du Rapport</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for consultation in consultations %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-calendar-alt text-primary me-2"></i>
+                                            {{ consultation.dateConsultation|date('d/m/Y H:i') }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="text-wrap" style="max-width: 300px;">
+                                            {{ consultation.description|slice(0, 100) }}
+                                            {% if consultation.description|length > 100 %}...{% endif %}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if consultation.rapport %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-file-medical me-1"></i>
+                                                Rapport disponible
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-warning">
+                                                <i class="fas fa-clock me-1"></i>
+                                                En attente
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('front_consultation_show', {'id': consultation.id}) }}" 
+                                           class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-eye me-1"></i>
+                                            Voir les détails
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+        <!-- Programme Section -->
+        <div class="card shadow-sm mb-5">
+            <div class="card-header bg-info text-white">
+                <h3 class="h4 mb-0">
+                    <i class="fas fa-graduation-cap me-2"></i>
+                    Programmes Disponibles
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for programme in programmes|default([]) %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 shadow-sm border-info">
+                                <div class="card-header bg-info text-white">
+                                    <h4 class="mb-0">{{ programme.nom }}</h4>
+        </div>
+        <div class="card-body">
+                                    <!-- QR Code -->
+                                    <div class="text-center mb-3">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data={{ programme.nom|url_encode }}" 
+                                             alt="QR Code for {{ programme.nom }}"
+                                             class="img-fluid border">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <i class="bi bi-calendar-date me-2"></i>
+                                        <strong>Date:</strong> 
+                                        {% if programme.date is defined %}
+                                            {{ programme.date|date('d/m/Y H:i') }}
+                                        {% else %}
+                                            À déterminer
+                            {% endif %}
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <i class="bi bi-graph-up me-2"></i>
+                                        <strong>Progression:</strong> {{ programme.progression }}
+                                    </div>
+                                    
+                                    <!-- Star Rating System -->
+                                    <div class="mb-3">
+                                        <p class="mb-1"><strong>Évaluation:</strong></p>
+                                        <div class="rating-container" data-programme="{{ programme.nom }}">
+                                            <div class="stars">
+                                                <i class="bi bi-star fs-5 star" data-value="1"></i>
+                                                <i class="bi bi-star fs-5 star" data-value="2"></i>
+                                                <i class="bi bi-star fs-5 star" data-value="3"></i>
+                                                <i class="bi bi-star fs-5 star" data-value="4"></i>
+                                                <i class="bi bi-star fs-5 star" data-value="5"></i>
+                                            </div>
+                                            <small class="text-muted rating-count">(0 votes)</small>
+                                        </div>
+                            </div>
+                                    
+                                    <button onclick="alert('Vous avez été inscrit au programme {{ programme.nom }} avec succès!')" 
+                                           class="btn btn-info w-100 mt-3">
+                                            <i class="bi bi-check-circle me-2"></i> Participer
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                        <div class="col-12 text-center">
+                            <p class="text-muted">Aucun programme disponible actuellement.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Experts Section -->
+        <div class="card shadow-sm mb-5">
+            <div class="card-header bg-warning text-dark">
+                <h3 class="h4 mb-0">
+                    <i class="fas fa-user-md me-2"></i>
+                    Nos Experts
+                </h3>
+                    </div>
+            <div class="card-body">
+                <div class="owl-carousel reviews-carousel owl-theme">
+                    {% for expert in experts|default([]) %}
+                        <figure class="reviews-thumb d-flex flex-column align-items-center text-center p-4 rounded shadow-lg bg-white position-relative">
+                            {% if expert.photo %}
+                                <img src="{{ asset('uploads/images/' ~ expert.photo) }}" 
+                                     class="img-fluid rounded-circle border border-warning shadow"
+                                     alt="Expert Photo"
+                                     style="width: 180px; height: 180px; object-fit: cover;">
+                            {% endif %}
+                            <figcaption class="mt-3">
+                                <h4 class="text-dark fw-bold mb-1">{{ expert.name }}</h4>
+                                <p class="text-primary small mb-2">
+                                    <i class="bi bi-briefcase"></i> 
+                                    Specialité: {{ expert.specialite }}
+                                </p>
+                                <p class="text-muted small mb-2">
+                                    <i class="bi bi-award"></i> 
+                                    Experience: {{ expert.experience }} years
+                                </p>
+                                <a href="{{ path('expert_calendar', {'id': expert.id}) }}" 
+                                   class="btn btn-warning mt-2 fw-bold">
+                                    <i class="bi bi-calendar-check"></i> 
+                                    Prendre Rendez-vous
+                                </a>
+                            </figcaption>
+                        </figure>
+                    {% else %}
+                        <p class="text-center text-muted">Aucun expert disponible actuellement.</p>
+                {% endfor %}
+                </div>
+                <!-- Custom Navigation Buttons -->
+                <div class="d-flex justify-content-center mt-3">
+                    <button class="btn btn-outline-warning me-2 prev-btn">
+                        <i class="bi bi-arrow-left"></i> Précédent
+                    </button>
+                    <button class="btn btn-outline-warning next-btn">
+                        Suivant <i class="bi bi-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.min.js"></script>
+    <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
+    
+    <!-- Carousel Configuration -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var owl = $(".reviews-carousel");
+
+            owl.owlCarousel({
+                loop: true,
+                margin: 20,
+                nav: false,
+                dots: false,
+                autoplay: true,
+                autoplayTimeout: 3000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: { items: 1 },
+                    600: { items: 2 },
+                    1000: { items: 3 }
+                }
+            });
+
+            $(".prev-btn").click(function() {
+                owl.trigger('prev.owl.carousel');
+            });
+
+            $(".next-btn").click(function() {
+                owl.trigger('next.owl.carousel');
+            });
+        });
+    </script>
+
+    <!-- Star Rating System -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ratingContainers = document.querySelectorAll('.rating-container');
+            
+            ratingContainers.forEach(container => {
+                const stars = container.querySelectorAll('.star');
+                const programmeName = container.dataset.programme;
+                
+                const storedRating = localStorage.getItem(`programme_rating_${programmeName}`);
+                if (storedRating) {
+                    updateStarDisplay(stars, parseInt(storedRating));
+                }
+                
+                stars.forEach(star => {
+                    star.addEventListener('mouseenter', () => {
+                        const value = parseInt(star.dataset.value);
+                        stars.forEach(s => {
+                            if (parseInt(s.dataset.value) <= value) {
+                                s.classList.add('hovered');
+                            } else {
+                                s.classList.remove('hovered');
+                            }
+                        });
+                    });
+                    
+                    container.addEventListener('mouseleave', () => {
+                        stars.forEach(s => s.classList.remove('hovered'));
+                    });
+                    
+                    star.addEventListener('click', () => {
+                        const value = parseInt(star.dataset.value);
+                        localStorage.setItem(`programme_rating_${programmeName}`, value);
+                        updateStarDisplay(stars, value);
+                        
+                        const countElement = container.querySelector('.rating-count');
+                        let count = parseInt(countElement.textContent.match(/\d+/)[0]) || 0;
+                        if (!star.classList.contains('selected')) {
+                            count++;
+                        }
+                        countElement.textContent = `(${count} votes)`;
+                    });
+                });
+            });
+            
+            function updateStarDisplay(stars, selectedValue) {
+                stars.forEach(s => {
+                    if (parseInt(s.dataset.value) <= selectedValue) {
+                        s.classList.add('selected');
+                        s.classList.remove('bi-star');
+                        s.classList.add('bi-star-fill');
+                    } else {
+                        s.classList.remove('selected');
+                        s.classList.remove('bi-star-fill');
+                        s.classList.add('bi-star');
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %} 

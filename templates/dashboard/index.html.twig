@@ -1,0 +1,283 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        .dashboard-card {
+            transition: transform 0.3s ease-in-out;
+            border: none;
+            border-radius: 15px;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-card {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+        }
+        .resource-card {
+            border-left: 4px solid #3498db;
+        }
+        .category-badge {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 300px;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .resource-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .resource-item {
+            transition: background-color 0.3s;
+        }
+        .resource-item:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid py-4">
+    <!-- Statistiques Globales -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Ressources</p>
+                                <h2 class="font-weight-bolder mb-0">
+                                    {{ stats.totalRessources }}
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-white shadow text-center rounded-circle">
+                                <i class="bx bx-book text-primary opacity-10" style="font-size: 1.5rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="card dashboard-card stat-card" style="background: linear-gradient(45deg, #2ecc71, #27ae60);">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Catégories</p>
+                                <h2 class="font-weight-bolder mb-0">
+                                    {{ stats.totalCategories }}
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-white shadow text-center rounded-circle">
+                                <i class="bx bx-folder text-success opacity-10" style="font-size: 1.5rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="card dashboard-card stat-card" style="background: linear-gradient(45deg, #e74c3c, #c0392b);">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Programmes</p>
+                                <h2 class="font-weight-bolder mb-0">
+                                    {{ stats.totalProgrammes }}
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-white shadow text-center rounded-circle">
+                                <i class="bx bx-calendar text-danger opacity-10" style="font-size: 1.5rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="card dashboard-card stat-card" style="background: linear-gradient(45deg, #9b59b6, #8e44ad);">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Consultations</p>
+                                <h2 class="font-weight-bolder mb-0">
+                                    {{ stats.totalConsultations }}
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-white shadow text-center rounded-circle">
+                                <i class="bx bx-user text-purple opacity-10" style="font-size: 1.5rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Graphique des Ressources par Catégorie -->
+        <div class="col-lg-7 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-header pb-0">
+                    <h6>Distribution des Ressources par Catégorie</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="resourcesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des Ressources Récentes -->
+        <div class="col-lg-5 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-header pb-0">
+                    <h6>Ressources Récentes</h6>
+                </div>
+                <div class="card-body">
+                    <div class="resource-list">
+                        {% for ressource in recentRessources %}
+                            <div class="resource-item p-3 rounded mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">{{ ressource.titre }}</h6>
+                                        <p class="text-sm text-muted mb-0">
+                                            <i class="bx bx-calendar"></i> 
+                                            {{ ressource.datePublication|date('d/m/Y') }}
+                                        </p>
+                                    </div>
+                                    <span class="category-badge">
+                                        {{ ressource.categorie.nom }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistiques détaillées par catégorie -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-header pb-0">
+                    <h6>Statistiques par Catégorie</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Catégorie</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Total Ressources</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Pourcentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stat in statsCategories %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex px-2 py-1">
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <h6 class="mb-0 text-sm">{{ stat.categorie }}</h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p class="text-sm font-weight-bold mb-0">{{ stat.total }}</p>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                {% set percentage = (stat.total / stats.totalRessources * 100)|round %}
+                                                <span class="text-sm font-weight-bold me-2">{{ percentage }}%</span>
+                                                <div class="progress" style="width: 100px; height: 5px;">
+                                                    <div class="progress-bar bg-gradient-info" role="progressbar" 
+                                                         style="width: {{ percentage }}%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('resourcesChart').getContext('2d');
+            var categoriesData = {{ categoriesData|raw }};
+            var categoriesCount = {{ categoriesCount|raw }};
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: categoriesData,
+                    datasets: [{
+                        data: categoriesCount,
+                        backgroundColor: [
+                            '#3498db',
+                            '#2ecc71',
+                            '#e74c3c',
+                            '#f1c40f',
+                            '#9b59b6',
+                            '#1abc9c',
+                            '#e67e22'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %} 
