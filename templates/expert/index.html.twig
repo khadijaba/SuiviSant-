@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Expert index{% endblock %}
+
+{% block body %}
+    <h1>Expert index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Specialite</th>
+                <th>Experience</th>
+                <th>Photo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for expert in experts %}
+            <tr>
+                <td>{{ expert.id }}</td>
+                <td>{{ expert.name }}</td>
+                <td>{{ expert.specialite }}</td>
+                <td>{{ expert.Experience }}</td>
+               <td>
+    {% if expert.photo %}
+        <img src="{{ asset('uploads/images/' ~ expert.photo) }}" alt="Expert Photo" width="100">
+    {% else %}
+        No Image
+    {% endif %}
+</td>
+
+                <td>
+                    <a href="{{ path('app_expert_show', {'id': expert.id}) }}">Show</a>
+                    <a href="{{ path('app_expert_edit', {'id': expert.id}) }}">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_expert_new') }}">Create new</a>
+{% endblock %}

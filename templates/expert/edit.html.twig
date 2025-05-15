@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Expert{% endblock %}
+
+{% block body %}
+    <h1>Edit Expert</h1>
+
+    {{ include('expert/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_expert_index') }}">back to list</a>
+
+    {{ include('expert/_delete_form.html.twig') }}
+{% endblock %}

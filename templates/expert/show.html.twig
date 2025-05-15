@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Expert{% endblock %}
+
+{% block body %}
+    <h1>Expert</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ expert.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ expert.name }}</td>
+            </tr>
+            <tr>
+                <th>Specialite</th>
+                <td>{{ expert.specialite }}</td>
+            </tr>
+            <tr>
+                <th>Experience</th>
+                <td>{{ expert.Experience }}</td>
+            </tr>
+           <tr>
+    <th>Photo</th>
+    <td>
+        {% if expert.photo %}
+            <img src="{{ asset('uploads/images/' ~ expert.photo) }}" alt="Expert Photo" width="200">
+        {% else %}
+            No Image Available
+        {% endif %}
+    </td>
+</tr>
+
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_expert_index') }}">Back to list</a>
+    <a href="{{ path('app_expert_edit', {'id': expert.id}) }}">Edit</a>
+
+    {{ include('expert/_delete_form.html.twig') }}
+{% endblock %}

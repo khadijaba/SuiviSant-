@@ -1,0 +1,177 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Poser une Question - Bien-Être+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    .question-form-container {
+        padding-top: 100px;
+        min-height: 100vh;
+        background-color: #f8f9fa;
+    }
+    .card-form {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .form-card-header {
+        background-color: #0d6efd;
+        color: white;
+        font-weight: 600;
+        border-radius: 10px 10px 0 0;
+    }
+    .form-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+    .guidelines {
+        background-color: #e9f7fe;
+        border-left: 4px solid #0d6efd;
+        padding: 15px;
+        margin-bottom: 25px;
+        border-radius: 5px;
+    }
+    .guidelines-title {
+        color: #0d6efd;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+    .guidelines ul {
+        margin-bottom: 0;
+        padding-left: 20px;
+    }
+    .guidelines li {
+        margin-bottom: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-expand-lg bg-light fixed-top shadow-lg">
+    <div class="container">
+        <!-- Mobile Brand -->
+        <a class="navbar-brand mx-auto d-lg-none" href="{{ path('app_home') }}">
+            Bien-Être+
+            <strong class="d-block">Health and Well-being</strong>
+        </a>
+
+        <!-- Navbar Toggler for Mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item {% if app.request.get('_route') == 'app_home' %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('app_home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+
+                <!-- Centered Brand for Large Screens -->
+                <a class="navbar-brand d-none d-lg-block" href="{{ path('app_home') }}">
+                    Bien-Être+
+                    <strong class="d-block">Health and Well-being</strong>
+                </a>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#reviews">Experts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#timeline">Timeline</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="question-form-container">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Flash messages -->
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} alert-dismissible fade show mb-4" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('app_forum_index') }}">Forum</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Poser une question</li>
+                    </ol>
+                </nav>
+
+                <!-- Question Form -->
+                <div class="card card-form mb-4">
+                    <div class="card-header form-card-header">
+                        <h3 class="mb-0">
+                            <i class="bi bi-question-circle me-2"></i>
+                            Poser une nouvelle question
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Guidelines Section -->
+                        <div class="guidelines">
+                            <h4 class="guidelines-title">
+                                <i class="bi bi-lightbulb me-2"></i>
+                                Conseils pour poser une bonne question
+                            </h4>
+                            <ul>
+                                <li>Soyez précis et fournissez le plus de détails possible</li>
+                                <li>Vérifiez que votre question n'a pas déjà été posée</li>
+                                <li>Choisissez un titre clair qui résume votre problème</li>
+                                <li>Si vous posez une question médicale, précisez qu'il ne s'agit pas d'un avis médical professionnel</li>
+                            </ul>
+                        </div>
+
+                        {{ form_start(form) }}
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ form_row(form.title) }}
+                                </div>
+                                <div class="col-12">
+                                    {{ form_row(form.content) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.category) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.authorName) }}
+                                </div>
+                                <div class="col-12">
+                                    {{ form_row(form.authorEmail) }}
+                                </div>
+                            </div>
+
+                            <div class="form-footer">
+                                <a href="{{ path('app_forum_index') }}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left me-2"></i>
+                                    Annuler
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle me-2"></i>
+                                    Publier la question
+                                </button>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
