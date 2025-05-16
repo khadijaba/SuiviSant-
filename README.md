@@ -48,4 +48,23 @@
 ---
 
 ## 📁 Structure du projet
+bien-etre-plus/
+│
+├── symfony/                  -> Application Web (FrontOffice & BackOffice)
+│   ├── src/                  -> Contrôleurs, entités, services, formulaires
+│   ├── templates/            -> Fichiers de vues Twig (pages utilisateur et admin)
+│   ├── public/               -> Fichiers statiques : CSS, JS, images
+│   └── config/               -> Fichiers de configuration Symfony
+│
+├── javafx-app/               -> Application bureau (JavaFX)
+│   ├── src/
+│   │   ├── controller/       -> Contrôleurs JavaFX
+│   │   ├── service/          -> Logique métier Java
+│   │   ├── model/            -> Modèles (entités Java)
+│   │   ├── view/             -> Interfaces graphiques (fichiers FXML)
+│   │   └── util/             -> Connexion à la base de données, helpers
+│
+├── database/                 -> Script SQL de création de la base de données
+│
+└── README.md                 -> Documentation du projet
 
